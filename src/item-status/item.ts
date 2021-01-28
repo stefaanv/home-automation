@@ -1,8 +1,11 @@
-import { ItemValueType } from './item-value.type'
+import { IItemValue } from './item-value.interface'
 
-export class Item<T extends ItemValueType> {
+function create<T>(c: {new(): T; }): T {
+  return new c();
+}
+export class Item<T extends IItemValue> {
   //#region properties
-  private _lastChange: Date
+  private _lastChange: Date | undefined
   private _state: T | undefined
   private _previousState: T | undefined
   private _name: string
@@ -26,9 +29,12 @@ export class Item<T extends ItemValueType> {
   }
   //#endregion
 
-  constructor(name: string, initialState?: T) {
-    this._lastChange = new Date()
-    this._state = initialState
+  constructor(name: string, initialState?: string|number) {
+    this._previousState = undefined
+    if (initialState){
+      this._lastChange = new Date()
+      this._state = new T()
+    } else {}
     this._name = name
   }
 

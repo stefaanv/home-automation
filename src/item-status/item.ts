@@ -28,12 +28,14 @@ export class Item<T extends IItemValue> {
     return this._previousState
   }
   //#endregion
-
+  private activator<T extends IItemValue>(type: { new(): T ;} ): T {
+    return new type();
+}
   constructor(name: string, initialState?: string|number) {
     this._previousState = undefined
     if (initialState){
       this._lastChange = new Date()
-      this._state = new T()
+      this._state = this.activator(T)
     } else {}
     this._name = name
   }

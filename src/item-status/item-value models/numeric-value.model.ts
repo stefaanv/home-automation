@@ -1,6 +1,8 @@
-import { IItemValue, ItemValueTypeIndicator } from '../item-value.abstract'
+import { ItemValueBase, ItemValueTypeIndicator } from '../item-value-base.abstract'
 
-export class NumericValue extends IItemValue {
+export type ValueDtt = string | number | undefined
+
+export class NumericValue extends ItemValueBase {
   protected _value: number | undefined
   private _unit: string
   private _precision: number
@@ -17,7 +19,7 @@ export class NumericValue extends IItemValue {
     return this._value
   }
 
-  check(value: string | number | undefined): boolean {
+  check(value: ValueDtt): boolean {
     if (typeof value == 'string') {
       return !isNaN(parseFloat(value))
     }
@@ -30,18 +32,22 @@ export class NumericValue extends IItemValue {
     return false
   }
 
-  update(newValue: string | number | undefined): boolean {
+  update(newValue: ValueDtt): boolean {
+    let nv: number | undefined | null = null
+
     if (typeof newValue == 'undefined') {
-      this._value = undefined
+      nv = undefined
     }
     if (typeof newValue == 'number') {
-      this._value = newValue
-      return true
+      nv = newValue
     }
     if (typeof newValue == 'string') {
-      this._value = parseFloat(newValue)
-      return true
+      nv = parseFloat(newValue)
     }
+    if (nv == null || nv == this._value) {
+      return false
+    }
+    this._value = nv
     return true
   }
 

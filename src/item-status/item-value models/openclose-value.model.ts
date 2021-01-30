@@ -1,7 +1,8 @@
-import { IItemValue, ItemValueTypeIndicator } from '../item-value.abstract'
+import { ItemValueBase } from '../item-value-base.abstract'
+import { ValueDtt } from './numeric-value.model'
 type OpenClosedValueType = 'open' | 'closed' | undefined
 
-export class OpenCloseValue extends IItemValue {
+export class OpenCloseValue extends ItemValueBase {
   protected _value: OpenClosedValueType
 
   constructor() {
@@ -27,31 +28,30 @@ export class OpenCloseValue extends IItemValue {
     return false
   }
 
-  update(newValue: string | number | undefined): boolean {
+  update(newValue: ValueDtt): boolean {
+    let nv: OpenClosedValueType | null
+
     if (typeof newValue == 'undefined') {
-      this._value = undefined
+      nv = undefined
     }
+
     if (typeof newValue == 'number') {
-      if (newValue == 0) this._value = 'closed'
-      else this._value = 'open'
-      return true
+      if (newValue == 0) nv = 'closed'
+      else nv = 'open'
     }
-    switch (newValue) {
-      case 'open':
-      case 'OPEN':
-      case 'Open': {
-        this._value = 'open'
-        return true
+
+    if (typeof newValue == 'string') {
+      const lc = newValue.toLowerCase()
+      if (lc == 'open' || lc == 'closed') {
+        nv = lc
       }
-      case 'closed':
-      case 'CLOSED':
-      case 'Closed': {
-        this._value = 'closed'
-        return true
-      }
-      default:
-        return false
     }
+
+    if (nv == null || nv == this._value) {
+      return false
+    }
+    this._value = nv
+    return true
   }
 
   public toString(): string {

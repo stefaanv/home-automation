@@ -1,10 +1,10 @@
-import { IItemValue, ItemValueFactory, ItemValueTypeIndicator } from './item-value.abstract'
+import { ItemValueBase as ItemValueBase, ItemValueFactory, ItemValueTypeIndicator } from './item-value-base.abstract'
 export class Item {
   //#region properties
-  private _typeIndicator: string
+  private _typeIndicator: ItemValueTypeIndicator
   private _lastChange: Date | undefined
-  private _state: IItemValue
-  private _previousState: IItemValue
+  private _state: ItemValueBase
+  private _previousState: ItemValueBase
   private _name: string
   //#endregion
 
@@ -17,16 +17,16 @@ export class Item {
     return this._lastChange
   }
 
-  public get state(): T {
+  public get state(): ItemValueBase {
     return this._state
   }
 
-  public get previousState(): T {
+  public get previousState(): ItemValueBase {
     return this._previousState
   }
   //#endregion
 
-  constructor(type: ItemValueTypeIndicator, name: string, initialStateValue?: string | number) {
+  constructor(type: ItemValueTypeIndicator, name: string, initialStateValue?: string | number | undefined) {
     this._typeIndicator = type
     this._state = ItemValueFactory(type)
     this._previousState = ItemValueFactory(type)
@@ -40,7 +40,7 @@ export class Item {
     this._name = name
   }
 
-  public UpdateStatus(newValue: string | number): boolean {
+  public UpdateStatus(newValue: string | number | undefined): boolean {
     if (!this._state.check(newValue)) return false
     this._previousState.updateFrom(this._state)
     this._state.update(newValue)

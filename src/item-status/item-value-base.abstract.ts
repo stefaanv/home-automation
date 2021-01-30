@@ -2,7 +2,7 @@ import { NumericValue } from './item-value models/numeric-value.model'
 import { OnOffValue } from './item-value models/onoff-value.model'
 import { OpenCloseValue } from './item-value models/openclose-value.model'
 
-export abstract class IItemValue {
+export abstract class ItemValueBase {
   _typeIndicator: ItemValueTypeIndicator
   protected abstract _value: string | number | undefined = undefined
 
@@ -14,7 +14,7 @@ export abstract class IItemValue {
     return typeof this._value !== 'undefined'
   }
 
-  updateFrom(other: OpenCloseValue) {
+  updateFrom(other: ItemValueBase) {
     this._value = other.value
   }
 
@@ -26,7 +26,7 @@ export abstract class IItemValue {
 
 export type ItemValueTypeIndicator = 'onoff' | 'openclosed' | 'numeric'
 
-export function ItemValueFactory(type: ItemValueTypeIndicator, precision?: number, unit?: string): IItemValue {
+export function ItemValueFactory(type: ItemValueTypeIndicator, precision?: number, unit?: string): ItemValueBase {
   switch (type) {
     case 'onoff':
       return new OnOffValue()

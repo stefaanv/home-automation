@@ -1,13 +1,10 @@
-import { IItemValue } from './item-value.interface'
-
-function create<T>(c: {new(): T; }): T {
-  return new c();
-}
-export class Item<T extends IItemValue> {
+import { IItemValue, ItemValueFactory, ItemValueTypeIndicator } from './item-value.abstract'
+export class Item {
   //#region properties
+  private _typeIndicator: string
   private _lastChange: Date | undefined
-  private _state: T | undefined
-  private _previousState: T | undefined
+  private _state: IItemValue
+  private _previousState: IItemValue
   private _name: string
   //#endregion
 
@@ -28,26 +25,25 @@ export class Item<T extends IItemValue> {
     return this._previousState
   }
   //#endregion
-  private activator<T extends IItemValue>(type: { new(): T ;} ): T {
-    return new type();
-}
-  constructor(name: string, initialState?: string|number) {
-    this._previousState = undefined
-    if (initialState){
+
+  constructor(type: ItemValueTypeIndicator, name: string, initialStateValue?: string | number) {
+    this._typeIndicator = type
+    this._state = ItemValueFactory(type)
+    this._previousState = ItemValueFactory(type)
+    if (initialStateValue && this._state.check(initialStateValue)) {
       this._lastChange = new Date()
-      this._state = this.activator(T)
-    } else {}
+      this._state.update(initialStateValue)
+    } else {
+      this._lastChange = undefined
+      this._state = undefined
+    }
     this._name = name
   }
 
-  public clone(): Item<T> {
-    return { ...this }
-  }
-
-  public UpdateStatus(newValue: ItemValueType) {
-    T.
-    if (!Text.(newValue)) {
-      console.error(`${newValue} is not of expected type, not udating`)
-    }
+  public UpdateStatus(newValue: string | number): boolean {
+    if (!this._state.check(newValue)) return false
+    this._previousState.updateFrom(this._state)
+    this._state.update(newValue)
+    this._lastChange = new Date()
   }
 }

@@ -15,7 +15,7 @@ export class OpenCloseValue extends ItemValueBase {
     return this._value
   }
 
-  check(value: string | number | undefined): boolean {
+  check(value: ValueDtt): boolean {
     if (typeof value == 'string') {
       return value.toLocaleLowerCase() == 'open' || value.toLocaleLowerCase() == 'closed'
     }

@@ -1,4 +1,6 @@
+import { ValueDtt } from './item-value models/numeric-value.model'
 import { ItemValueBase as ItemValueBase, ItemValueFactory, ItemValueTypeIndicator } from './item-value-base.abstract'
+
 export class Item {
   //#region properties
   private _typeIndicator: ItemValueTypeIndicator
@@ -26,7 +28,7 @@ export class Item {
   }
   //#endregion
 
-  constructor(type: ItemValueTypeIndicator, name: string, initialStateValue?: string | number | undefined) {
+  constructor(type: ItemValueTypeIndicator, name: string, initialStateValue?: ValueDtt) {
     this._typeIndicator = type
     this._state = ItemValueFactory(type)
     this._previousState = ItemValueFactory(type)
@@ -40,10 +42,12 @@ export class Item {
     this._name = name
   }
 
-  public UpdateStatus(newValue: string | number | undefined): boolean {
+  public updateStatus(newValue: ValueDtt): boolean {
     if (!this._state.check(newValue)) return false
-    this._previousState.updateFrom(this._state)
-    this._state.update(newValue)
-    this._lastChange = new Date()
+    const current = this.state.clone()
+    if (this._state.update(newValue)) {
+      this._previousState.updateFrom(current)
+      this._lastChange = new Date()
+    }
   }
 }

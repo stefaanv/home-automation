@@ -1,25 +1,18 @@
-import { ItemValueBase, ItemValueTypeIndicator } from '../item-value-base.abstract'
-
-export type ValueDtt = string | number | undefined
+import { ItemValueBase, ItemValueType } from '../item-value-base.abstract'
 
 export class NumericValue extends ItemValueBase {
-  protected _value: number | undefined
+  protected _value: number | undefined = undefined
   private _unit: string
   private _precision: number
 
   constructor(precision?: number, unit?: string) {
     super()
-    this._typeIndicator = 'numeric'
-    this._value = undefined
     this._precision = precision ?? 3
     this._unit = unit ?? ''
+    this._typeIndicator = 'numeric'
   }
 
-  public get value(): number | undefined {
-    return this._value
-  }
-
-  check(value: ValueDtt): boolean {
+  check(value: ItemValueType): boolean {
     if (typeof value == 'string') {
       return !isNaN(parseFloat(value))
     }
@@ -32,7 +25,7 @@ export class NumericValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ValueDtt): boolean {
+  update(newValue: ItemValueType): boolean {
     let nv: number | undefined | null = null
 
     if (typeof newValue == 'undefined') {

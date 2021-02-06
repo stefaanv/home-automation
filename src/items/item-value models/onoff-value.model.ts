@@ -1,5 +1,5 @@
-import { ItemValueBase } from '../item-value-base.abstract'
-import { ValueDtt } from './numeric-value.model'
+import { ItemValueBase, ItemValueType } from '../item-value-base.abstract'
+
 type OnOffValueType = 'on' | 'off' | undefined
 
 export class OnOffValue extends ItemValueBase {
@@ -8,14 +8,9 @@ export class OnOffValue extends ItemValueBase {
   constructor() {
     super()
     this._typeIndicator = 'onoff'
-    this._value = undefined
   }
 
-  public get value(): OnOffValueType {
-    return this._value
-  }
-
-  check(value: ValueDtt): boolean {
+  check(value: ItemValueType): boolean {
     if (typeof value == 'string') {
       return value.toLocaleLowerCase() == 'on' || value.toLocaleLowerCase() == 'off'
     }
@@ -28,7 +23,7 @@ export class OnOffValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ValueDtt): boolean {
+  update(newValue: ItemValueType): boolean {
     let nv: OnOffValueType | null
 
     if (typeof newValue == 'undefined') {
@@ -55,6 +50,6 @@ export class OnOffValue extends ItemValueBase {
   }
 
   public toString(): string {
-    return this._value
+    return this._value.toString()
   }
 }

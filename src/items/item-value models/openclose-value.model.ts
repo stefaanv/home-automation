@@ -1,5 +1,5 @@
-import { ItemValueBase } from '../item-value-base.abstract'
-import { ValueDtt } from './numeric-value.model'
+import { ItemValueBase, ItemValueType } from '../item-value-base.abstract'
+
 type OpenClosedValueType = 'open' | 'closed' | undefined
 
 export class OpenCloseValue extends ItemValueBase {
@@ -8,14 +8,9 @@ export class OpenCloseValue extends ItemValueBase {
   constructor() {
     super()
     this._typeIndicator = 'openclosed'
-    this._value = undefined
   }
 
-  public get value(): OpenClosedValueType {
-    return this._value
-  }
-
-  check(value: ValueDtt): boolean {
+  check(value: ItemValueType): boolean {
     if (typeof value == 'string') {
       return value.toLocaleLowerCase() == 'open' || value.toLocaleLowerCase() == 'closed'
     }
@@ -28,7 +23,7 @@ export class OpenCloseValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ValueDtt): boolean {
+  update(newValue: ItemValueType): boolean {
     let nv: OpenClosedValueType | null
 
     if (typeof newValue == 'undefined') {
@@ -55,6 +50,6 @@ export class OpenCloseValue extends ItemValueBase {
   }
 
   public toString(): string {
-    return this._value
+    return this._value.toString()
   }
 }

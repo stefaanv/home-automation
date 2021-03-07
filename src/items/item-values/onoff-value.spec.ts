@@ -151,4 +151,18 @@ describe('OnOff ItemValue', () => {
       expect(itemValue.value).toBe('off')
     })
   })
+
+  describe('toString of 0', () => {
+    it('must return "off"', () => {
+      itemValue.update(0)
+      expect(itemValue.value?.toString()).toBe('off')
+    })
+  })
+
+  describe('toString of ON', () => {
+    it('must return "on"', () => {
+      itemValue.update('ON')
+      expect(itemValue.value?.toString()).toBe('on')
+    })
+  })
 })

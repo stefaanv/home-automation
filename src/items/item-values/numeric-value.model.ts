@@ -48,6 +48,6 @@ export class NumericValue extends ItemValueBase<number> {
     if (!this._value) {
       return 'undefined'
     }
-    return this._value.toFixed(this._precision) + ' ' + this._unit
+    return this._value.toFixed(this._precision) + (this._unit ? ' ' + this._unit : '')
   }
 }

@@ -1,4 +1,4 @@
-import { ItemValueBase, ItemValueType } from './item-value-base.abstract'
+import { ItemValueBase, Primitive } from './item-value-base.abstract'
 
 export class NumericValue extends ItemValueBase<number> {
   private _unit: string
@@ -10,34 +10,38 @@ export class NumericValue extends ItemValueBase<number> {
     this._unit = unit ?? ''
   }
 
-  check(value: ItemValueType): boolean {
-    if (typeof value == 'string') {
+  check(value: Primitive): boolean {
+    if (typeof value === 'string') {
       return !isNaN(parseFloat(value))
     }
-    if (typeof value == 'number') {
+    if (typeof value === 'number') {
       return true
     }
-    if (typeof value == 'undefined') {
+    if (typeof value === 'undefined') {
       return true
     }
     return false
   }
 
-  update(newValue: ItemValueType): boolean {
+  update(newValue: Primitive): boolean {
     if (!this.check(newValue)) return false
 
-    if (typeof newValue == 'undefined') {
+    if (typeof newValue === 'undefined') {
       this._value = undefined
       return true
     }
 
-    if (typeof newValue == 'number') {
+    if (typeof newValue === 'number') {
       this._value = newValue
       return true
     }
 
-    this._value = parseFloat(newValue)
-    return true
+    if (typeof newValue === 'string') {
+      this._value = parseFloat(newValue)
+      return true
+    }
+
+    return false
   }
 
   public toString(): string {

@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common'
-import { Item, IItem } from './item'
-import { ItemValueBase, ItemValueType, ItemValueTypeIndicator } from './item-value models/item-value-base.abstract'
+import { Item } from './item'
+import { Primitive } from './item-values/item-value-base.abstract'
+import { ItemValueTypeIndicator } from './item-values/item-value-type-indicators'
 
 @Injectable()
 export class ItemStatusService {
-  private _items = new Map<string, IItem>()
-  public declare(
-    type: { new (precision?: number, unit?: string) },
-    name: string,
-    initialState?: ItemValueType,
-    precision?: number,
-    unit?: string,
-  ) {
-    const item = new Item(type, name, initialState, precision, unit)
+  private _items = new Map<string, Item>()
+  public declare(name: string, type: ItemValueTypeIndicator, initialState?: Primitive, precision?: number, unit?: string) {
+    const item = new Item(name, type, initialState, precision, unit)
     this._items.set(name, item)
   }
 
@@ -21,6 +16,6 @@ export class ItemStatusService {
   }
 
   public getState(name: string) {
-    return this._items.get(name).state
+    return this._items.get(name)?.state ?? undefined
   }
 }

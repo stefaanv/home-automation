@@ -1,16 +1,13 @@
-import { ItemValueBase, ItemValue } from './item-value-base.abstract'
+import { ItemValueBase, ItemValueType } from './item-value-base.abstract'
 
-type OpenClosedValueType = 'open' | 'closed' | undefined
+export type OpenClosedValueType = 'open' | 'closed' | undefined
 
-export class OpenCloseValue extends ItemValueBase {
-  protected _value: OpenClosedValueType
-
+export class OpenCloseValue extends ItemValueBase<OpenClosedValueType> {
   constructor() {
-    super()
-    this._typeIndicator = 'openclosed'
+    super('OpenClosed')
   }
 
-  check(value: ItemValue): boolean {
+  check(value: ItemValueType): boolean {
     if (typeof value == 'string') {
       return value.toLocaleLowerCase() == 'open' || value.toLocaleLowerCase() == 'closed'
     }
@@ -23,33 +20,26 @@ export class OpenCloseValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ItemValue): boolean {
-    let nv: OpenClosedValueType | null
+  update(newValue: ItemValueType) {
+    if (!this.check(newValue)) return false
 
     if (typeof newValue == 'undefined') {
-      nv = undefined
+      this._value = undefined
+      return true
     }
 
     if (typeof newValue == 'number') {
-      if (newValue == 0) nv = 'closed'
-      else nv = 'open'
+      if (newValue !== 0 && newValue !== 1) return false
+      if (newValue == 0) this._value = 'closed'
+      this._value = 'open'
     }
 
-    if (typeof newValue == 'string') {
-      const lc = newValue.toLowerCase()
-      if (lc == 'open' || lc == 'closed') {
-        nv = lc
-      }
-    }
-
-    if (nv == null || nv == this._value) {
-      return false
-    }
-    this._value = nv
-    return true
+    const lc = newValue.toString().toLocaleLowerCase()
+    if (lc !== 'open' && lc !== 'closed') return false
+    this._value = lc
   }
 
   public toString(): string {
-    return this._value.toString()
+    return this._value
   }
 }

@@ -1,46 +1,42 @@
-export type ItemValue = string | number | undefined
-export type ItemValueTypeIndicator = 'onoff' | 'openclosed' | 'numeric'
+import { OpenClosedValueType } from './openclose-value.model'
+import { OnOffValueType } from './onoff-value.model'
 
-export interface IItemValue {
-  hasValue(): boolean
-  update(newValue: ItemValue): boolean
-  updateFrom(other: IItemValue): boolean
-  readonly value: ItemValue
-  readonly typeIndicator: ItemValueTypeIndicator
-  check(value: ItemValue): boolean
-  toString(): string
-  clone(): IItemValue
-}
+export type ItemValueType = OnOffValueType | OpenClosedValueType | number | undefined
+export type ItemValueTypeIndicators = 'OnOff' | 'OpenClosed' | 'Numeric'
 
-export abstract class ItemValueBase implements IItemValue {
-  protected _value: ItemValue = undefined
-  protected _typeIndicator: ItemValueTypeIndicator
+export abstract class ItemValueBase<T extends ItemValueType> {
+  protected _value: T = undefined
+  public type: ItemValueTypeIndicators
 
-  constructor(precision?: number, unit?: string) {
+  constructor(typeIndicator: ItemValueTypeIndicators, precision?: number, unit?: string) {
     this._value = undefined
+    this.type = typeIndicator
   }
 
   hasValue(): boolean {
     return typeof this._value !== 'undefined'
   }
 
-  public abstract update(newValue: ItemValue): boolean
+  public abstract update(newValue: T): boolean
 
-  updateFrom(other: IItemValue) {
-    if (this._typeIndicator != other.typeIndicator) return false
-    this._value = other.value
+  updateFrom(other: ItemValueBase<T>) {
+    if (other.type != this.type) return false
+    this._value = other._value
     return true
   }
 
   public get value() {
     return this._value
   }
-  public get typeIndicator() {
-    return this._typeIndicator
-  }
-  public abstract check(value: ItemValue): boolean
+
+  /**
+   * Check if the passed value is valid
+   */
+  public abstract check(value: ItemValueType): boolean
+
   public abstract toString(): string
-  public clone(): IItemValue {
+
+  public clone(): ItemValueBase<T> {
     return { ...this }
   }
 }

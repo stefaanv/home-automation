@@ -1,16 +1,14 @@
-import { ItemValueBase, ItemValue } from './item-value-base.abstract'
+import { ItemValueBase, ItemValueType } from './item-value-base.abstract'
 
-type OnOffValueType = 'on' | 'off' | undefined
+export type OnOffValueType = 'on' | 'off' | undefined
 
-export class OnOffValue extends ItemValueBase {
-  protected _value: OnOffValueType
-
+//TODO OnOff en OpenClosed samenvoegen met 2 extra generics
+export class OnOffValue extends ItemValueBase<OnOffValueType> {
   constructor() {
-    super()
-    this._typeIndicator = 'onoff'
+    super('OnOff')
   }
 
-  check(value: ItemValue): boolean {
+  check(value: ItemValueType): boolean {
     if (typeof value == 'string') {
       return value.toLocaleLowerCase() == 'on' || value.toLocaleLowerCase() == 'off'
     }
@@ -23,30 +21,23 @@ export class OnOffValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ItemValue): boolean {
-    let nv: OnOffValueType | null
+  update(newValue: ItemValueType) {
+    if (!this.check(newValue)) return false
 
     if (typeof newValue == 'undefined') {
-      nv = undefined
+      this._value = undefined
+      return true
     }
 
     if (typeof newValue == 'number') {
-      if (newValue == 0) nv = 'off'
-      else nv = 'on'
+      if (newValue !== 0 && newValue !== 1) return false
+      if (newValue == 0) this._value = 'off'
+      this._value = 'on'
     }
 
-    if (typeof newValue == 'string') {
-      const lc = newValue.toLowerCase()
-      if (lc == 'on' || lc == 'off') {
-        nv = lc
-      }
-    }
-
-    if (nv == null || nv == this._value) {
-      return false
-    }
-    this._value = nv
-    return true
+    const lc = newValue.toString().toLocaleLowerCase()
+    if (lc !== 'on' && lc !== 'off') return false
+    this._value = lc
   }
 
   public toString(): string {

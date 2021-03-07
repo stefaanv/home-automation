@@ -1,18 +1,16 @@
-import { ItemValueBase, ItemValue } from './item-value-base.abstract'
+import { ItemValueBase, ItemValueType } from './item-value-base.abstract'
 
-export class NumericValue extends ItemValueBase {
-  protected _value: number | undefined = undefined
+export class NumericValue extends ItemValueBase<number> {
   private _unit: string
   private _precision: number
 
   constructor(precision?: number, unit?: string) {
-    super()
+    super('Numeric')
     this._precision = precision ?? 3
     this._unit = unit ?? ''
-    this._typeIndicator = 'numeric'
   }
 
-  check(value: ItemValue): boolean {
+  check(value: ItemValueType): boolean {
     if (typeof value == 'string') {
       return !isNaN(parseFloat(value))
     }
@@ -25,22 +23,20 @@ export class NumericValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ItemValue): boolean {
-    let nv: number | undefined | null = null
+  update(newValue: ItemValueType): boolean {
+    if (!this.check(newValue)) return false
 
     if (typeof newValue == 'undefined') {
-      nv = undefined
+      this._value = undefined
+      return true
     }
+
     if (typeof newValue == 'number') {
-      nv = newValue
+      this._value = newValue
+      return true
     }
-    if (typeof newValue == 'string') {
-      nv = parseFloat(newValue)
-    }
-    if (nv == null || nv == this._value) {
-      return false
-    }
-    this._value = nv
+
+    this._value = parseFloat(newValue)
     return true
   }
 

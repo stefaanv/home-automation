@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Item, IItem } from './item'
-import { ItemValueBase, ItemValue, ItemValueTypeIndicator } from './item-value models/item-value-base.abstract'
+import { ItemValueBase, ItemValueType, ItemValueTypeIndicator } from './item-value models/item-value-base.abstract'
 
 @Injectable()
 export class ItemStatusService {
@@ -8,7 +8,7 @@ export class ItemStatusService {
   public declare(
     type: { new (precision?: number, unit?: string) },
     name: string,
-    initialState?: ItemValue,
+    initialState?: ItemValueType,
     precision?: number,
     unit?: string,
   ) {

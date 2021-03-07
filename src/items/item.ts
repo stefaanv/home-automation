@@ -1,6 +1,6 @@
 import {
   ItemValueBase,
-  ItemValue,
+  ItemValueType,
   ItemValueTypeIndicator,
   IItemValue,
 } from './item-value models/item-value-base.abstract'
@@ -10,7 +10,7 @@ export interface IItem {
   readonly lastChange: Date
   readonly state: IItemValue
   readonly previousState: IItemValue
-  updateStatus(newValue: ItemValue): boolean
+  updateStatus(newValue: ItemValueType): boolean
 }
 
 export class Item<T extends ItemValueBase> {
@@ -46,7 +46,7 @@ export class Item<T extends ItemValueBase> {
   constructor(
     valueType: { new (precision?: number, unit?: string): T },
     name: string,
-    initialStateValue?: ItemValue,
+    initialStateValue?: ItemValueType,
     precision?: number,
     unit?: string,
   ) {
@@ -62,7 +62,7 @@ export class Item<T extends ItemValueBase> {
     this._name = name
   }
 
-  public updateStatus(newValue: ItemValue): boolean {
+  public updateStatus(newValue: ItemValueType): boolean {
     if (!this._state.check(newValue)) return false
     const current = this.state.clone()
     if (this._state.update(newValue)) {

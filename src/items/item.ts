@@ -20,10 +20,12 @@ export class Item {
   }
 
   public get state(): string {
+    if (!this._state.hasValue) return 'null'
     return this._state.toString()
   }
 
   public get previousState(): string {
+    if (!this._previousState.hasValue) return 'null'
     return this._previousState.toString()
   }
 

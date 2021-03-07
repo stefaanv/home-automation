@@ -165,4 +165,36 @@ describe('OnOff ItemValue', () => {
       expect(itemValue.value?.toString()).toBe('on')
     })
   })
+
+  describe('equals', () => {
+    it('true for equal values', () => {
+      itemValue.update('on')
+      const itemValue2 = new OnOffValue()
+      itemValue2.update(1)
+      expect(itemValue2.equals(itemValue)).toBeTruthy()
+    })
+  })
+
+  describe('equals', () => {
+    it('false for unequal values', () => {
+      itemValue.update('ON')
+      const itemValue2 = new OnOffValue()
+      itemValue2.update(0)
+      expect(itemValue2.equals(itemValue)).toBeFalsy()
+    })
+  })
+
+  describe('clone', () => {
+    it('has the same value', () => {
+      itemValue.update(1)
+      const clone = itemValue.clone()
+      expect(clone.value).toBe('on')
+    })
+    it(`change doesn't affect othe rigional`, () => {
+      itemValue.update(1)
+      const clone = itemValue.clone()
+      clone.update('off')
+      expect(itemValue.value).toBe('on')
+    })
+  })
 })

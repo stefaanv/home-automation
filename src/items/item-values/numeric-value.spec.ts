@@ -126,4 +126,45 @@ describe('Numeric ItemValue', () => {
       expect(itemValue.toString()).toBe('10.123')
     })
   })
+
+  describe('updateFrom', () => {
+    it('copies the correct value', () => {
+      itemValue.update(-10.5)
+      const itemValue2 = new NumericValue()
+      itemValue2.updateFrom(itemValue)
+      expect(itemValue2.value).toBe(-10.5)
+    })
+  })
+
+  describe('equals', () => {
+    it('true for equal values', () => {
+      itemValue.update(7.9)
+      const itemValue2 = new NumericValue()
+      itemValue2.update(7.9)
+      expect(itemValue2.equals(itemValue)).toBeTruthy()
+    })
+  })
+
+  describe('equals', () => {
+    it('false for unequal values', () => {
+      itemValue.update(7.9)
+      const itemValue2 = new NumericValue()
+      itemValue2.update(9.7)
+      expect(itemValue2.equals(itemValue)).toBeFalsy()
+    })
+  })
+
+  describe('clone', () => {
+    it('has the same value', () => {
+      itemValue.update(7.9)
+      const clone = itemValue.clone()
+      expect(clone.value).toBe(7.9)
+    })
+    it(`change doesn't affect othe rigional`, () => {
+      itemValue.update(7.9)
+      const clone = itemValue.clone()
+      clone.update(800.0)
+      expect(itemValue.value).toBe(7.9)
+    })
+  })
 })

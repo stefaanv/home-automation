@@ -165,4 +165,36 @@ describe('OpenClosed ItemValue', () => {
       expect(itemValue.value?.toString()).toBe('open')
     })
   })
+
+  describe('equals', () => {
+    it('true for equal values', () => {
+      itemValue.update('open')
+      const itemValue2 = new OpenClosedValue()
+      itemValue2.update(1)
+      expect(itemValue2.equals(itemValue)).toBeTruthy()
+    })
+  })
+
+  describe('equals', () => {
+    it('false for unequal values', () => {
+      itemValue.update('OPEN')
+      const itemValue2 = new OpenClosedValue()
+      itemValue2.update(0)
+      expect(itemValue2.equals(itemValue)).toBeFalsy()
+    })
+  })
+
+  describe('clone', () => {
+    it('has the same value', () => {
+      itemValue.update(1)
+      const clone = itemValue.clone()
+      expect(clone.value).toBe('open')
+    })
+    it(`change doesn't affect othe rigional`, () => {
+      itemValue.update(1)
+      const clone = itemValue.clone()
+      clone.update('closed')
+      expect(itemValue.value).toBe('open')
+    })
+  })
 })

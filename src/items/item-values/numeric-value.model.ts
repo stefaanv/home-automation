@@ -50,4 +50,10 @@ export class NumericValue extends ItemValueBase<number> {
     }
     return this._value.toFixed(this._precision) + (this._unit ? ' ' + this._unit : '')
   }
+
+  public clone(): NumericValue {
+    const result = new NumericValue(this._precision, this._unit)
+    result._value = this._value
+    return result
+  }
 }

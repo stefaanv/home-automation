@@ -2,7 +2,7 @@ import { ItemValueBase, Primitive } from './item-value-base.abstract'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 
 export class BinaryValue<T_zero extends string, T_one extends string> extends ItemValueBase<T_zero | T_one | undefined> {
-  constructor(typeIndicator: ItemValueTypeIndicator, private zero_value: T_zero, private one_value: T_one) {
+  constructor(private typeIndicator: ItemValueTypeIndicator, private zero_value: T_zero, private one_value: T_one) {
     super(typeIndicator)
     this.zero_value = zero_value
     this.one_value = one_value
@@ -46,5 +46,11 @@ export class BinaryValue<T_zero extends string, T_one extends string> extends It
   public toString(): string {
     if (!this._value) return 'undefined'
     return this._value
+  }
+
+  public clone(): BinaryValue<T_zero, T_one> {
+    const result = new BinaryValue<T_zero, T_one>(this.typeIndicator, this.zero_value, this.one_value)
+    result._value = this._value
+    return result
   }
 }

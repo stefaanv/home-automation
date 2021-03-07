@@ -56,7 +56,5 @@ export abstract class ItemValueBase<T extends Primitive> implements ItemValue {
 
   public abstract toString(): string
 
-  clone() {
-    return { ...this }
-  }
+  abstract clone(): ItemValue
 }

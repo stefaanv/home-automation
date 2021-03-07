@@ -1,4 +1,4 @@
-import { ItemValue, Primitive } from './item-values/item-value-base.abstract'
+import { ItemValue, Primitive } from './item-values/item-value.interface'
 import { itemValueFactory } from './item-values/item-value-factory'
 import { ItemValueTypeIndicator } from './item-values/item-value-type-indicators'
 

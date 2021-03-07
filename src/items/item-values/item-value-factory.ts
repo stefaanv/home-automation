@@ -1,4 +1,4 @@
-import { ItemValue } from './item-value-base.abstract'
+import { ItemValue } from './item-value.interface'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 import { NumericValue } from './numeric-value.model'
 import { OnOffValue } from './onoff-value.model'

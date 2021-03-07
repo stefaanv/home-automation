@@ -1,11 +1,13 @@
-import { ItemValueBase, Primitive } from './item-value-base.abstract'
+import { ItemValueTypeIndicator } from './item-value-type-indicators'
+import { Primitive } from './item-value.interface'
 
-export class NumericValue extends ItemValueBase<number> {
+export class NumericValue {
+  public readonly type: ItemValueTypeIndicator
   private _unit: string
   private _precision: number
 
-  constructor(precision?: number, unit?: string) {
-    super('Numeric')
+  constructor(public readonly value: Primitive | undefined, precision?: number, unit?: string) {
+    this.type = 'Numeric'
     this._precision = precision ?? 3
     this._unit = unit ?? ''
   }

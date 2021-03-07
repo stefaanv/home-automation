@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Item } from './item'
-import { Primitive } from './item-values/item-value-base.abstract'
+import { Primitive } from './item-values/item-value.interface'
 import { ItemValueTypeIndicator } from './item-values/item-value-type-indicators'
 
 @Injectable()

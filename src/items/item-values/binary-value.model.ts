@@ -1,11 +1,24 @@
-import { ItemValueBase, Primitive } from './item-value-base.abstract'
+import { Primitive } from './item-value.interface'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 
-export class BinaryValue<T_zero extends string, T_one extends string> extends ItemValueBase<T_zero | T_one | undefined> {
-  constructor(private typeIndicator: ItemValueTypeIndicator, private zero_value: T_zero, private one_value: T_one) {
-    super(typeIndicator)
-    this.zero_value = zero_value
-    this.one_value = one_value
+export class BinaryValue<T_zero extends string, T_one extends string> {
+  constructor(
+    readonly type: ItemValueTypeIndicator,
+    public readonly value: T_zero | T_one | undefined,
+    private readonly zero_value: T_zero,
+    private readonly one_value: T_one,
+  ) {
+    if (typeof value === 'number') {
+      if (value !== 0 && value !== 1) {
+        this.value = undefined
+      } else {
+        this.value = value === 0 ? this.zero_value : this.one_value
+      }
+    } else if (typeof value === 'string') {
+      this.value = value.toLocaleLowerCase() as T_zero | T_one
+    } else {
+      this.value = undefined
+    }
   }
 
   public check(value: Primitive): boolean {
@@ -21,36 +34,17 @@ export class BinaryValue<T_zero extends string, T_one extends string> extends It
     return false
   }
 
-  public update(newValue: Primitive) {
-    if (!this.check(newValue)) return false
-
-    if (typeof newValue === 'undefined') {
-      this._value = undefined
-      return true
-    }
-
-    if (typeof newValue === 'number') {
-      if (newValue !== 0 && newValue !== 1) return false
-      this._value = newValue === 0 ? this.zero_value : this.one_value
-      return true
-    }
-
-    if (typeof newValue === 'string') {
-      this._value = newValue.toLocaleLowerCase() as T_zero | T_one
-      return true
-    }
-
-    return false
-  }
-
   public toString(): string {
-    if (!this._value) return 'undefined'
-    return this._value
+    if (this.value === undefined) return 'null'
+    return this.value
   }
 
   public clone(): BinaryValue<T_zero, T_one> {
-    const result = new BinaryValue<T_zero, T_one>(this.typeIndicator, this.zero_value, this.one_value)
-    result._value = this._value
-    return result
+    return new BinaryValue<T_zero, T_one>(this.type, this.value, this.zero_value, this.one_value)
+  }
+
+  public equals(other: ItemValue): boolean {
+    if (this.type !== other.type) return false
+    return this.value === other.value
   }
 }

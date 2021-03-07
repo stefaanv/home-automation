@@ -1,4 +1,4 @@
-import { ItemValueBase, ItemValueType } from '../item-value-base.abstract'
+import { ItemValueBase, ItemValue } from './item-value-base.abstract'
 
 type OnOffValueType = 'on' | 'off' | undefined
 
@@ -10,7 +10,7 @@ export class OnOffValue extends ItemValueBase {
     this._typeIndicator = 'onoff'
   }
 
-  check(value: ItemValueType): boolean {
+  check(value: ItemValue): boolean {
     if (typeof value == 'string') {
       return value.toLocaleLowerCase() == 'on' || value.toLocaleLowerCase() == 'off'
     }
@@ -23,7 +23,7 @@ export class OnOffValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ItemValueType): boolean {
+  update(newValue: ItemValue): boolean {
     let nv: OnOffValueType | null
 
     if (typeof newValue == 'undefined') {

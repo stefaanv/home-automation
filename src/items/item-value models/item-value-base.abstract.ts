@@ -1,19 +1,19 @@
-export type ItemValueType = string | number | undefined
+export type ItemValue = string | number | undefined
 export type ItemValueTypeIndicator = 'onoff' | 'openclosed' | 'numeric'
 
 export interface IItemValue {
   hasValue(): boolean
-  update(newValue: ItemValueType): boolean
+  update(newValue: ItemValue): boolean
   updateFrom(other: IItemValue): boolean
-  readonly value: ItemValueType
+  readonly value: ItemValue
   readonly typeIndicator: ItemValueTypeIndicator
-  check(value: ItemValueType): boolean
+  check(value: ItemValue): boolean
   toString(): string
   clone(): IItemValue
 }
 
 export abstract class ItemValueBase implements IItemValue {
-  protected _value: ItemValueType = undefined
+  protected _value: ItemValue = undefined
   protected _typeIndicator: ItemValueTypeIndicator
 
   constructor(precision?: number, unit?: string) {
@@ -24,7 +24,7 @@ export abstract class ItemValueBase implements IItemValue {
     return typeof this._value !== 'undefined'
   }
 
-  public abstract update(newValue: ItemValueType): boolean
+  public abstract update(newValue: ItemValue): boolean
 
   updateFrom(other: IItemValue) {
     if (this._typeIndicator != other.typeIndicator) return false
@@ -38,7 +38,7 @@ export abstract class ItemValueBase implements IItemValue {
   public get typeIndicator() {
     return this._typeIndicator
   }
-  public abstract check(value: ItemValueType): boolean
+  public abstract check(value: ItemValue): boolean
   public abstract toString(): string
   public clone(): IItemValue {
     return { ...this }

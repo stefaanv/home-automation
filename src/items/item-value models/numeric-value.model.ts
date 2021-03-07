@@ -1,4 +1,4 @@
-import { ItemValueBase, ItemValueType } from '../item-value-base.abstract'
+import { ItemValueBase, ItemValue } from './item-value-base.abstract'
 
 export class NumericValue extends ItemValueBase {
   protected _value: number | undefined = undefined
@@ -12,7 +12,7 @@ export class NumericValue extends ItemValueBase {
     this._typeIndicator = 'numeric'
   }
 
-  check(value: ItemValueType): boolean {
+  check(value: ItemValue): boolean {
     if (typeof value == 'string') {
       return !isNaN(parseFloat(value))
     }
@@ -25,7 +25,7 @@ export class NumericValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ItemValueType): boolean {
+  update(newValue: ItemValue): boolean {
     let nv: number | undefined | null = null
 
     if (typeof newValue == 'undefined') {

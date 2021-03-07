@@ -1,4 +1,4 @@
-import { ItemValueBase, ItemValueType } from '../item-value-base.abstract'
+import { ItemValueBase, ItemValue } from './item-value-base.abstract'
 
 type OpenClosedValueType = 'open' | 'closed' | undefined
 
@@ -10,7 +10,7 @@ export class OpenCloseValue extends ItemValueBase {
     this._typeIndicator = 'openclosed'
   }
 
-  check(value: ItemValueType): boolean {
+  check(value: ItemValue): boolean {
     if (typeof value == 'string') {
       return value.toLocaleLowerCase() == 'open' || value.toLocaleLowerCase() == 'closed'
     }
@@ -23,7 +23,7 @@ export class OpenCloseValue extends ItemValueBase {
     return false
   }
 
-  update(newValue: ItemValueType): boolean {
+  update(newValue: ItemValue): boolean {
     let nv: OpenClosedValueType | null
 
     if (typeof newValue == 'undefined') {

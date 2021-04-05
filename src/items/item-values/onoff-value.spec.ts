@@ -1,200 +1,226 @@
-import { itemValueFactory } from './item-value-factory'
+import { ItemValue } from './item-value.model'
+import { NumericValue } from './numeric-value.model'
 import { OnOffValue } from './onoff-value.model'
+import { OpenClosedValue } from './openclose-value.model'
 
 describe('OnOff ItemValue', () => {
-  let itemValue: OnOffValue
-
   beforeEach(() => {
-    itemValue = new OnOffValue()
+    OnOffValue.initialize()
   })
 
   describe('initial status', () => {
     it('should be undefined', () => {
+      const itemValue = new OnOffValue()
       expect(itemValue.value).toBeUndefined()
-    })
-  })
-
-  describe('can be created with itemValueFactory', () => {
-    it('should be of type OnOffValueType', () => {
-      expect(itemValueFactory('OnOff')).toBeInstanceOf(OnOffValue)
+      expect(itemValue.hasValue).toBeFalsy()
+      expect(itemValue).toBeInstanceOf(ItemValue)
+      expect(itemValue).toBeInstanceOf(OnOffValue)
+      expect(itemValue).not.toBeInstanceOf(OpenClosedValue)
     })
   })
 
   describe('Check accepts valid string values', () => {
     it('accepts "on"', () => {
-      expect(itemValue.check('on')).toBeTruthy()
+      expect(OnOffValue.check('on')).toBeTruthy()
     })
     it('accepts "On"', () => {
-      expect(itemValue.check('On')).toBeTruthy()
+      expect(OnOffValue.check('On')).toBeTruthy()
     })
     it('accepts "ON"', () => {
-      expect(itemValue.check('ON')).toBeTruthy()
+      expect(OnOffValue.check('ON')).toBeTruthy()
     })
     it('accepts "off"', () => {
-      expect(itemValue.check('off')).toBeTruthy()
+      expect(OnOffValue.check('off')).toBeTruthy()
     })
     it('accepts "Off"', () => {
-      expect(itemValue.check('Off')).toBeTruthy()
+      expect(OnOffValue.check('Off')).toBeTruthy()
     })
     it('accepts "OFF"', () => {
-      expect(itemValue.check('OFF')).toBeTruthy()
+      expect(OnOffValue.check('OFF')).toBeTruthy()
     })
   })
 
   describe('Check rejects illegal string values', () => {
     it('rejects "test"', () => {
-      expect(itemValue.check('test')).toBeFalsy()
+      expect(OnOffValue.check('test')).toBeFalsy()
     })
     it('rejects "open"', () => {
-      expect(itemValue.check('open')).toBeFalsy()
+      expect(OnOffValue.check('open')).toBeFalsy()
     })
     it('rejects "close"', () => {
-      expect(itemValue.check('close')).toBeFalsy()
+      expect(OnOffValue.check('close')).toBeFalsy()
     })
     it('rejects "yes"', () => {
-      expect(itemValue.check('yes')).toBeFalsy()
+      expect(OnOffValue.check('yes')).toBeFalsy()
     })
     it('rejects "no"', () => {
-      expect(itemValue.check('no')).toBeFalsy()
+      expect(OnOffValue.check('no')).toBeFalsy()
     })
     it('rejects "undefined"', () => {
-      expect(itemValue.check('undefined')).toBeFalsy()
+      expect(OnOffValue.check('undefined')).toBeFalsy()
     })
     it('rejects "0"', () => {
-      expect(itemValue.check('0')).toBeFalsy()
+      expect(OnOffValue.check('0')).toBeFalsy()
     })
     it('rejects "1"', () => {
-      expect(itemValue.check('1')).toBeFalsy()
+      expect(OnOffValue.check('1')).toBeFalsy()
     })
     it('rejects "true"', () => {
-      expect(itemValue.check('true')).toBeFalsy()
+      expect(OnOffValue.check('true')).toBeFalsy()
     })
     it('rejects "false"', () => {
-      expect(itemValue.check('false')).toBeFalsy()
+      expect(OnOffValue.check('false')).toBeFalsy()
     })
   })
 
   describe('Check accepts valid numerical values', () => {
     it('accepts 0', () => {
-      expect(itemValue.check(0)).toBeTruthy()
+      expect(OnOffValue.check(0)).toBeTruthy()
     })
     it('accepts 1', () => {
-      expect(itemValue.check(1)).toBeTruthy()
+      expect(OnOffValue.check(1)).toBeTruthy()
     })
   })
 
-  describe('Check rejects illegal string values', () => {
+  describe('Check rejects illegal numerical values', () => {
     it('rejects -1', () => {
-      expect(itemValue.check(-1)).toBeFalsy()
+      expect(OnOffValue.check(-1)).toBeFalsy()
     })
     it('rejects -2', () => {
-      expect(itemValue.check(-2)).toBeFalsy()
+      expect(OnOffValue.check(-2)).toBeFalsy()
     })
     it('rejects 2', () => {
-      expect(itemValue.check(2)).toBeFalsy()
+      expect(OnOffValue.check(2)).toBeFalsy()
     })
     it('rejects 3', () => {
-      expect(itemValue.check(3)).toBeFalsy()
+      expect(OnOffValue.check(3)).toBeFalsy()
     })
   })
 
-  describe('update to "on"', () => {
-    it('update successfull', () => {
-      const success = itemValue.update('on')
-      expect(success).toBeTruthy()
-      expect(itemValue.hasValue).toBeTruthy()
+  describe('create new', () => {
+    it('create with "on"', () => {
+      const itemValue = new OnOffValue('on')
       expect(itemValue.value).toBe('on')
-    })
-  })
-
-  describe('update to "OFF"', () => {
-    it('update successfull', () => {
-      const success = itemValue.update('OFF')
-      expect(success).toBeTruthy()
       expect(itemValue.hasValue).toBeTruthy()
-      expect(itemValue.value).toBe('off')
+      expect(itemValue.toString()).toBe('on')
     })
-  })
 
-  describe('update to 1', () => {
-    it('update successfull', () => {
-      const success = itemValue.update(1)
-      expect(success).toBeTruthy()
-      expect(itemValue.hasValue).toBeTruthy()
+    it('create with "On"', () => {
+      const itemValue = new OnOffValue('On')
       expect(itemValue.value).toBe('on')
+      expect(itemValue.toString()).toBe('on')
     })
-  })
 
-  describe('update to 0', () => {
-    it('update successfull', () => {
-      const success = itemValue.update(0)
-      expect(success).toBeTruthy()
-      expect(itemValue.hasValue).toBeTruthy()
-      expect(itemValue.value).toBe('off')
-    })
-  })
-
-  describe('update to illegal value "test"', () => {
-    it('must fail', () => {
-      itemValue.update('on')
-      const success = itemValue.update('test')
-      expect(success).toBeFalsy()
+    it('create with "ON"', () => {
+      const itemValue = new OnOffValue('ON')
       expect(itemValue.value).toBe('on')
+      expect(itemValue.toString()).toBe('on')
     })
-  })
 
-  describe('update to illegal value "3"', () => {
-    it('must fail', () => {
-      itemValue.update(0)
-      const success = itemValue.update(3)
-      expect(success).toBeFalsy()
+    it('create with 1', () => {
+      const itemValue = new OnOffValue(1)
+      expect(itemValue.value).toBe('on')
+      expect(itemValue.toString()).toBe('on')
+    })
+
+    it('create with "off"', () => {
+      const itemValue = new OnOffValue('off')
       expect(itemValue.value).toBe('off')
+      expect(itemValue.toString()).toBe('off')
+    })
+
+    it('create with "Off"', () => {
+      const itemValue = new OnOffValue('Off')
+      expect(itemValue.value).toBe('off')
+      expect(itemValue.toString()).toBe('off')
+    })
+
+    it('create with "OFF"', () => {
+      const itemValue = new OnOffValue('OFF')
+      expect(itemValue.value).toBe('off')
+      expect(itemValue.toString()).toBe('off')
+    })
+
+    it('create with 0', () => {
+      const itemValue = new OnOffValue(0)
+      expect(itemValue.value).toBe('off')
+      expect(itemValue.toString()).toBe('off')
+    })
+
+    it('create with true', () => {
+      const itemValue = new OnOffValue(true)
+      expect(itemValue.value).toBe('on')
+      expect(itemValue.toString()).toBe('on')
+    })
+
+    it('create with false', () => {
+      const itemValue = new OnOffValue(false)
+      expect(itemValue.value).toBe('off')
+      expect(itemValue.toString()).toBe('off')
     })
   })
 
-  describe('toString of 0', () => {
-    it('must return "off"', () => {
-      itemValue.update(0)
-      expect(itemValue.value?.toString()).toBe('off')
-    })
-  })
-
-  describe('toString of ON', () => {
-    it('must return "on"', () => {
-      itemValue.update('ON')
-      expect(itemValue.value?.toString()).toBe('on')
-    })
-  })
-
-  describe('equals', () => {
+  describe('equals ', () => {
     it('true for equal values', () => {
-      itemValue.update('on')
-      const itemValue2 = new OnOffValue()
-      itemValue2.update(1)
-      expect(itemValue2.equals(itemValue)).toBeTruthy()
+      const itemValue1 = new OnOffValue('on')
+      const itemValue2 = new OnOffValue(1)
+      expect(itemValue2.equals(itemValue1)).toBeTruthy()
+      expect(itemValue1.equals(itemValue2)).toBeTruthy()
+      expect(itemValue1.equals('on')).toBeTruthy()
+      expect(itemValue1.equals('ON')).toBeTruthy()
+      expect(itemValue1.equals(1)).toBeTruthy()
+      expect(itemValue1.equals(true)).toBeTruthy()
     })
-  })
 
-  describe('equals', () => {
     it('false for unequal values', () => {
-      itemValue.update('ON')
-      const itemValue2 = new OnOffValue()
-      itemValue2.update(0)
-      expect(itemValue2.equals(itemValue)).toBeFalsy()
+      const itemValue1 = new OnOffValue('on')
+      const itemValue2 = new OnOffValue(0)
+      expect(itemValue2.equals(itemValue1)).toBeFalsy()
+      expect(itemValue1.equals(itemValue2)).toBeFalsy()
+      expect(itemValue1.equals('off')).toBeFalsy()
+      expect(itemValue1.equals(0)).toBeFalsy()
+      expect(itemValue1.equals(false)).toBeFalsy()
+    })
+
+    it('undefined does not equal other value', () => {
+      const itemValue1 = new OnOffValue('on')
+      const itemValue2 = new OnOffValue(undefined)
+      expect(itemValue2.equals(itemValue1)).toBeFalsy()
+      expect(itemValue1.equals(itemValue2)).toBeFalsy()
+      expect(itemValue1.equals(undefined)).toBeFalsy()
+      expect(itemValue1.equals('blabla')).toBeFalsy()
+    })
+
+    it('undefined does not equal other value', () => {
+      const itemValue1 = new OnOffValue(undefined)
+      const itemValue2 = new OnOffValue('OFF')
+      expect(itemValue2.equals(itemValue1)).toBeFalsy()
+      expect(itemValue1.equals(itemValue2)).toBeFalsy()
+      expect(itemValue1.equals('on')).toBeFalsy()
+      expect(itemValue1.equals(true)).toBeFalsy()
+      expect(itemValue1.equals(undefined)).toBeTruthy()
+    })
+
+    it('Compare with OpenClosed type', () => {
+      const itemValue1 = new OnOffValue(1)
+      const itemValue2 = new OpenClosedValue('open')
+      expect(itemValue2.equals(itemValue1)).toBeFalsy()
+      expect(itemValue1.equals(itemValue2)).toBeFalsy()
+    })
+
+    it('Compare with Numeric type', () => {
+      const itemValue1 = new OnOffValue(0)
+      const itemValue2 = new NumericValue(0)
+      expect(itemValue2.equals(itemValue1)).toBeFalsy()
+      expect(itemValue1.equals(itemValue2)).toBeFalsy()
     })
   })
 
   describe('clone', () => {
     it('has the same value', () => {
-      itemValue.update(1)
+      const itemValue = new OnOffValue(1)
       const clone = itemValue.clone()
       expect(clone.value).toBe('on')
-    })
-    it(`change doesn't affect othe rigional`, () => {
-      itemValue.update(1)
-      const clone = itemValue.clone()
-      clone.update('off')
-      expect(itemValue.value).toBe('on')
     })
   })
 })

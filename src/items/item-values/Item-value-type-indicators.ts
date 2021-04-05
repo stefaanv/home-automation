@@ -1,1 +1,1 @@
-export type ItemValueTypeIndicator = 'Numeric' | 'OnOff' | 'OpenClosed'
+export type ItemValueTypeIndicator = 'Numeric' | 'Integer' | 'OnOff' | 'OpenClosed'

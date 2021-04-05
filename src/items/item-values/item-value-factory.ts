@@ -1,16 +1,32 @@
-import { ItemValue } from './item-value.interface'
+import { ItemValue, Primitive } from './item-value.model'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 import { NumericValue } from './numeric-value.model'
 import { OnOffValue } from './onoff-value.model'
 import { OpenClosedValue } from './openclose-value.model'
+import { IntegerValue } from './integer-value.model'
 
-export const itemValueFactory = (type: ItemValueTypeIndicator, precision?: number, unit?: string): ItemValue => {
+export function itemValueFactory(type: ItemValueTypeIndicator, value: Primitive): ItemValue {
   switch (type) {
     case 'Numeric':
-      return new NumericValue(precision, unit)
+      return new NumericValue(value)
+    case 'Integer':
+      return new IntegerValue(value)
     case 'OnOff':
-      return new OnOffValue()
+      return new OnOffValue(value)
     case 'OpenClosed':
-      return new OpenClosedValue()
+      return new OpenClosedValue(value)
+  }
+}
+
+export function checkValue(type: ItemValueTypeIndicator, value: Primitive): boolean {
+  switch (type) {
+    case 'Numeric':
+      return NumericValue.check(value)
+    case 'Integer':
+      return IntegerValue.check(value)
+    case 'OnOff':
+      return OnOffValue.check(value)
+    case 'OpenClosed':
+      return OpenClosedValue.check(value)
   }
 }

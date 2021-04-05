@@ -1,50 +1,47 @@
-import { Primitive } from './item-value.interface'
-import { ItemValueTypeIndicator } from './item-value-type-indicators'
+import { ItemValue, Primitive } from './item-value.model'
 
-export class BinaryValue<T_zero extends string, T_one extends string> {
-  constructor(
-    readonly type: ItemValueTypeIndicator,
-    public readonly value: T_zero | T_one | undefined,
-    private readonly zero_value: T_zero,
-    private readonly one_value: T_one,
-  ) {
-    if (typeof value === 'number') {
-      if (value !== 0 && value !== 1) {
-        this.value = undefined
-      } else {
-        this.value = value === 0 ? this.zero_value : this.one_value
-      }
-    } else if (typeof value === 'string') {
-      this.value = value.toLocaleLowerCase() as T_zero | T_one
-    } else {
-      this.value = undefined
+export type BinaryValueLabels = { zero: string; one: string }
+
+export abstract class BinaryValue extends ItemValue {
+  public readonly value: string | undefined
+  public static labels: BinaryValueLabels
+
+  constructor(labels: BinaryValueLabels, pValue?: Primitive) {
+    super()
+    this.value = BinaryValue.toInternalValue(pValue, labels)
+  }
+
+  public static check(pValue: Primitive, labels: BinaryValueLabels) {
+    switch (typeof pValue) {
+      case 'string':
+        return pValue.toLocaleLowerCase() == labels.zero || pValue.toLocaleLowerCase() == labels.one
+      case 'number':
+        return pValue === 0 || pValue === 1
+      case 'boolean':
+      case 'undefined':
+        return true
+      default:
+        return false
     }
   }
 
-  public check(value: Primitive): boolean {
-    if (typeof value === 'string') {
-      return value.toLocaleLowerCase() == this.zero_value || value.toLocaleLowerCase() == this.one_value
+  static toInternalValue(pValue: Primitive, labels: BinaryValueLabels) {
+    if (!BinaryValue.check(pValue, labels) || pValue == undefined) return undefined
+
+    switch (typeof pValue) {
+      case 'string':
+        return pValue.toLocaleLowerCase()
+      case 'number':
+        return pValue === 0 ? labels.zero : labels.one
+      case 'boolean':
+        return pValue ? labels.one : labels.zero
+      default:
+        return undefined
     }
-    if (typeof value === 'number') {
-      return value === 0 || value === 1
-    }
-    if (typeof value === 'undefined') {
-      return true
-    }
-    return false
   }
 
-  public toString(): string {
+  public toString() {
     if (this.value === undefined) return 'null'
     return this.value
-  }
-
-  public clone(): BinaryValue<T_zero, T_one> {
-    return new BinaryValue<T_zero, T_one>(this.type, this.value, this.zero_value, this.one_value)
-  }
-
-  public equals(other: ItemValue): boolean {
-    if (this.type !== other.type) return false
-    return this.value === other.value
   }
 }

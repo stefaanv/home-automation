@@ -1,61 +1,57 @@
-import { ItemValueTypeIndicator } from './item-value-type-indicators'
-import { Primitive } from './item-value.interface'
+import { ItemValue, Primitive } from './item-value.model'
 
-export class NumericValue {
-  public readonly type: ItemValueTypeIndicator
+export class NumericValue extends ItemValue {
+  public readonly value: number | undefined
   private _unit: string
   private _precision: number
 
-  constructor(public readonly value: Primitive | undefined, precision?: number, unit?: string) {
-    this.type = 'Numeric'
-    this._precision = precision ?? 3
-    this._unit = unit ?? ''
+  constructor(pValue?: Primitive) {
+    super()
+    this.value = NumericValue.toInternalValue(pValue)
   }
 
-  check(value: Primitive): boolean {
-    if (typeof value === 'string') {
-      return !isNaN(parseFloat(value))
+  public static check(pValue: Primitive): boolean {
+    switch (typeof pValue) {
+      case 'string':
+        return !isNaN(parseFloat(pValue as string))
+      case 'number':
+      case 'undefined':
+        return true
+      case 'boolean':
+      default:
+        return false
     }
-    if (typeof value === 'number') {
-      return true
-    }
-    if (typeof value === 'undefined') {
-      return true
-    }
-    return false
   }
 
-  update(newValue: Primitive): boolean {
-    if (!this.check(newValue)) return false
+  static toInternalValue(pValue: Primitive): number | undefined {
+    if (!NumericValue.check(pValue) || pValue == undefined) return undefined
 
-    if (typeof newValue === 'undefined') {
-      this._value = undefined
-      return true
+    switch (typeof pValue) {
+      case 'string':
+        return parseFloat(pValue as string)
+      case 'number':
+        return pValue
+      case 'boolean':
+      default:
+        return undefined
     }
-
-    if (typeof newValue === 'number') {
-      this._value = newValue
-      return true
-    }
-
-    if (typeof newValue === 'string') {
-      this._value = parseFloat(newValue)
-      return true
-    }
-
-    return false
   }
 
-  public toString(): string {
-    if (!this._value) {
-      return 'undefined'
+  public equals(other: ItemValue | Primitive): boolean {
+    if (other instanceof ItemValue) {
+      return super.equals(other)
+    } else {
+      const pValue = other as Primitive
+      return this.value == NumericValue.toInternalValue(pValue)
     }
-    return this._value.toFixed(this._precision) + (this._unit ? ' ' + this._unit : '')
+  }
+
+  public toString(unit?: string, precision?: number): string {
+    if (!this.value) return 'null'
+    return this.value.toFixed(precision) + (unit ? ' ' + unit : '')
   }
 
   public clone(): NumericValue {
-    const result = new NumericValue(this._precision, this._unit)
-    result._value = this._value
-    return result
+    return new NumericValue(this.value)
   }
 }

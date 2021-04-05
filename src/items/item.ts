@@ -1,5 +1,5 @@
-import { ItemValue, Primitive } from './item-values/item-value.interface'
-import { itemValueFactory } from './item-values/item-value-factory'
+import { ItemValue, Primitive } from './item-values/item-value.model'
+import { itemValueFactory, checkValue } from './item-values/item-value-factory'
 import { ItemValueTypeIndicator } from './item-values/item-value-type-indicators'
 
 export class Item {
@@ -8,11 +8,18 @@ export class Item {
   private _state: ItemValue
   private _previousState: ItemValue
   private _name: string
+  private _type: ItemValueTypeIndicator
+  private _precision: number | undefined
+  private _unit: string | undefined
   //#endregion
 
   //#region getters
   public get name(): string {
     return this._name
+  }
+
+  public get lastValue(): Primitive {
+    return this._previousState.value
   }
 
   public get lastChange(): Date | undefined {
@@ -32,32 +39,38 @@ export class Item {
   public get typeIndicator(): ItemValueTypeIndicator {
     return this._state.type
   }
+
+  public get hasValue() {
+    return this._state.hasValue
+  }
   //#endregion
 
-  constructor(name: string, type: ItemValueTypeIndicator, initialStateValue?: Primitive, precision?: number, unit?: string) {
-    this._state = itemValueFactory(type, precision, unit)
-    this._previousState = itemValueFactory(type, precision, unit)
-    if (initialStateValue && this._state.check(initialStateValue)) {
-      this._lastChange = new Date()
-      this._state.update(initialStateValue)
-    } else {
-      this._lastChange = undefined
-    }
+  constructor(
+    type: ItemValueTypeIndicator,
+    name: string,
+    initialStateValue?: Primitive,
+    precision?: number,
+    unit?: string,
+    now = new Date(),
+  ) {
+    this._type = type
+    this._state = itemValueFactory(type, initialStateValue)
+    this._previousState = itemValueFactory(type, undefined)
+    this._lastChange = this._state.hasValue ? now : undefined
     this._name = name
+    this._precision = precision
+    this._unit = unit
   }
 
-  public updateStatus(newValue: Primitive): boolean {
-    if (!this._state.check(newValue)) return false
-    const current = this._state.clone()
-    if (this._state.update(newValue)) {
-      this._previousState = current
-      this._lastChange = new Date()
-      return true
-    }
-    return false
+  public updateStatus(newValue: Primitive, now = new Date()): boolean {
+    const current = this._state
+    this._state = itemValueFactory(this._type, newValue)
+    this._previousState = current
+    this._lastChange = now
+    return true
   }
 
   public toString(): string {
-    return this._state.toString()
+    return this._state.toString(this._unit, this._precision)
   }
 }

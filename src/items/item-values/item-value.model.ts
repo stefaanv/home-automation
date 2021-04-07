@@ -1,7 +1,5 @@
+import { Primitive } from '../core-types'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
-
-export type Primitive = string | number | boolean | undefined
-export type PrimitiveOrUndefined = Primitive | undefined
 
 export abstract class ItemValue {
   type: ItemValueTypeIndicator

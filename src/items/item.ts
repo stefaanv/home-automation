@@ -1,4 +1,5 @@
-import { ItemValue, Primitive } from './item-values/item-value.model'
+import { ItemValue } from './item-values/item-value.model'
+import { Primitive, UpdateType } from './core-types'
 import { itemValueFactory, checkValue } from './item-values/item-value-factory'
 import { ItemValueTypeIndicator } from './item-values/item-value-type-indicators'
 
@@ -7,15 +8,21 @@ export class Item {
   private _lastChange: Date | undefined = undefined
   private _state: ItemValue
   private _previousState: ItemValue
-  private _name: string
-  private _type: ItemValueTypeIndicator
-  private _precision: number | undefined
-  private _unit: string | undefined
+  private readonly _updateType: UpdateType
+  private readonly _type: ItemValueTypeIndicator
+  private readonly _label: string
+  private readonly _id: string
+  private readonly _precision: number | undefined
+  private readonly _unit: string | undefined
   //#endregion
 
   //#region getters
-  public get name(): string {
-    return this._name
+  public get label(): string {
+    return this._label
+  }
+
+  public get id(): string {
+    return this._id
   }
 
   public get lastValue(): Primitive {
@@ -47,17 +54,21 @@ export class Item {
 
   constructor(
     type: ItemValueTypeIndicator,
-    name: string,
+    id: string,
+    label?: string,
     initialStateValue?: Primitive,
+    updateType?: UpdateType,
     precision?: number,
     unit?: string,
     now = new Date(),
   ) {
     this._type = type
+    this._id = id
+    this._label = label ?? id
     this._state = itemValueFactory(type, initialStateValue)
+    this._updateType = updateType ?? 'event'
     this._previousState = itemValueFactory(type, undefined)
     this._lastChange = this._state.hasValue ? now : undefined
-    this._name = name
     this._precision = precision
     this._unit = unit
   }
@@ -71,6 +82,6 @@ export class Item {
   }
 
   public toString(): string {
-    return this._state.toString(this._unit, this._precision)
+    return `${this._label ?? this.id} = ${this._state.toString(this._unit, this._precision)}`
   }
 }

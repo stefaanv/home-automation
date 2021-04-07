@@ -1,5 +1,5 @@
-import { Item } from './item'
-import { ItemChangedCallback, Primitive, UpdateType } from './core-types'
+import { Item } from '../item'
+import { ItemChangedCallback, Primitive, UpdateType } from '../core-types'
 
 export class BindingConnector {
   private readonly _bindingLabel: string

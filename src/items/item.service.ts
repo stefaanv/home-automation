@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { Item } from './item'
 import { ItemChangedCallback, Primitive, UpdateType } from './core-types'
 import { ItemValueTypeIndicator } from './item-values/item-value-type-indicators'
-import { BindingConnector } from './binding-connector'
+import { BindingConnector } from './bindings/binding-connector'
 
 @Injectable()
-export class ItemService {
+export class Coordinator {
   private _items = new Map<string, Item>()
   private _connectors = new Map<number, BindingConnector>()
   private _itemIdCounter = 0

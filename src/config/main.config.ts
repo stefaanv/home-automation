@@ -1,5 +1,6 @@
 export default () => {
+  children: [{ file: 'deconz.config.js', label: 'deconz', active: true }]
   main: {
-    port: process.env.PORT ?? 3000
+    apiPort: process.env.PORT ?? 3000
   }
 }

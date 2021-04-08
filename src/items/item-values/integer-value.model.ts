@@ -1,4 +1,4 @@
-import { ItemValue, Primitive } from './item-value.model'
+import { Primitive } from '../core-types'
 import { NumericValue } from './numeric-value.model'
 
 export class IntegerValue extends NumericValue {

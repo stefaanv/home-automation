@@ -1,5 +1,6 @@
+import { Primitive } from '../core-types'
 import { BinaryValue, BinaryValueLabels } from './binary-value.model'
-import { ItemValue, Primitive } from './item-value.model'
+import { ItemValue } from './item-value.model'
 
 export class OnOffValue extends BinaryValue {
   static labels: BinaryValueLabels

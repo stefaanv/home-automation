@@ -11,7 +11,7 @@ export class Item {
   private readonly _updateType: UpdateType
   private readonly _type: ItemValueTypeIndicator
   private readonly _label: string
-  private readonly _id: string
+  private readonly _topic: string
   private readonly _precision: number | undefined
   private readonly _unit: string | undefined
   //#endregion
@@ -21,8 +21,8 @@ export class Item {
     return this._label
   }
 
-  public get id(): string {
-    return this._id
+  public get topic(): string {
+    return this._topic
   }
 
   public get lastValue(): Primitive {
@@ -54,7 +54,7 @@ export class Item {
 
   constructor(
     type: ItemValueTypeIndicator,
-    id: string,
+    topic: string,
     label?: string,
     initialStateValue?: Primitive,
     updateType?: UpdateType,
@@ -63,8 +63,8 @@ export class Item {
     now = new Date(),
   ) {
     this._type = type
-    this._id = id
-    this._label = label ?? id
+    this._topic = topic
+    this._label = label ?? topic
     this._state = itemValueFactory(type, initialStateValue)
     this._updateType = updateType ?? 'event'
     this._previousState = itemValueFactory(type, undefined)
@@ -82,6 +82,6 @@ export class Item {
   }
 
   public toString(): string {
-    return `${this._label ?? this.id} = ${this._state.toString(this._unit, this._precision)}`
+    return `${this._label ?? this.topic} = ${this._state.toString(this._unit, this._precision)}`
   }
 }

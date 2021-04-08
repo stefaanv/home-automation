@@ -1,18 +1,24 @@
 import { Injectable } from '@nestjs/common'
 import { Item } from './item'
-import { ItemChangedCallback, Primitive, UpdateType } from './core-types'
+import { ItemChangedToBinding, ItemChangedToCoordinator, Primitive, UpdateType } from './core-types'
 import { ItemValueTypeIndicator } from './item-values/item-value-type-indicators'
 import { BindingConnector } from './bindings/binding-connector'
+import { LogFacade } from './log-facade'
 
 @Injectable()
 export class Coordinator {
   private _items = new Map<string, Item>()
   private _connectors = new Map<number, BindingConnector>()
   private _itemIdCounter = 0
+  private _log: LogFacade
+
+  constructor(log: LogFacade) {
+    this._log = log.child('coordinator')
+  }
 
   public declare(
     type: ItemValueTypeIndicator,
-    id: string,
+    topic: string,
     label?: string,
     initialValue?: Primitive,
     updateType?: UpdateType,
@@ -20,8 +26,8 @@ export class Coordinator {
     unit?: string,
     now = new Date(),
   ) {
-    const item = new Item(type, id, label, initialValue, updateType, precision, unit)
-    this._items.set(id, item)
+    const item = new Item(type, topic, label, initialValue, updateType, precision, unit)
+    this._items.set(topic, item)
   }
 
   public get(name: string) {
@@ -32,30 +38,30 @@ export class Coordinator {
     return this._items.get(name)?.state ?? undefined
   }
 
-  public bind(label: string, itemChangedCallback: ItemChangedCallback) {
+  public bind(label: string, itemChangedCallback: ItemChangedToBinding) {
     const counter = this._itemIdCounter++
     const connector = new BindingConnector(counter, label, itemChangedCallback)
     this._connectors.set(counter, connector)
   }
 
-  public subscribe(itemId: string, bindingId: number) {
+  public subscribe(topic: string, bindingId: number) {
     const connector = this._connectors.get(bindingId)
     if (!connector) {
-      //TODO! log "connector with id ${bindingId} does not exist"
+      this._log.error(`connector with id ${bindingId} does not exist`, '1aa38')
       return
     }
-    connector.subscribe(itemId)
+    connector.subscribe(topic)
   }
 
-  public updateFromBinding(itemId: string, newValue: Primitive) {
-    const item = this._items.get(itemId)
+  public updateFromBinding: ItemChangedToCoordinator = (topic, newValue) => {
+    const item = this._items.get(topic)
     if (!item) {
-      //TODO! log "item ${itemLabel} does not exist"
+      this._log.warn(`item '${topic}' does not exist`, '381b8')
       return
     }
     const result = item.updateStatus(newValue)
     if (!result) {
-      //TODO! log "Unable to update item ${itemLabel} to ${newValue}"
+      this._log.warn(`Unable to update item ${topic} to ${newValue}`, '381b8')
       return
     }
   }

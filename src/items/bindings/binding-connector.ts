@@ -1,25 +1,28 @@
 import { Item } from '../item'
-import { ItemChangedCallback, Primitive, UpdateType } from '../core-types'
+import { ItemChangedToBinding, Primitive, UpdateType } from '../core-types'
+import match from 'mqtt-match'
 
 export class BindingConnector {
   private readonly _bindingLabel: string
   private readonly _bindingId: number
-  private readonly _subscribedIds: string[]
-  private readonly _updateToBinding: ItemChangedCallback
+  private readonly _topicMatchers: string[]
+  private readonly _updateToBinding: ItemChangedToBinding
 
-  constructor(id: number, label: string, updateToBinding: ItemChangedCallback) {
+  constructor(id: number, label: string, updateToBinding: ItemChangedToBinding) {
     this._bindingId = id
     this._bindingLabel = label
     this._updateToBinding = updateToBinding
   }
 
-  public subscribe(itemId: string) {
-    this._subscribedIds.push(itemId)
+  public subscribe(matcher: string) {
+    this._topicMatchers.push(matcher)
   }
 
-  public updateToBinding(item: Item) {
-    if (this._updateToBinding && this._subscribedIds.includes(item.id)) {
-      this._updateToBinding(item)
+  public async updateToBinding(item: Item) {
+    if (this._updateToBinding) {
+      for await (let matcher of this._topicMatchers) {
+        if (match(matcher, item.topic)) this._updateToBinding(item)
+      }
     }
   }
 }

@@ -3,7 +3,7 @@ import { Item } from './item'
 import { ItemChangedToBinding, ItemChangedToCoordinator, Primitive, UpdateType } from './core-types'
 import { ItemValueTypeIndicator } from './item-values/item-value-type-indicators'
 import { BindingConnector } from './bindings/binding-connector'
-import { LogFacade } from './log-facade'
+import { LogFacade } from '../logging/log-facade'
 
 @Injectable()
 export class Coordinator {

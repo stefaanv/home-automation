@@ -1,5 +1,5 @@
 import { ItemChangedToCoordinator } from 'src/items/core-types'
-import { LogFacade } from 'src/items/log-facade'
+import { LogFacade } from 'src/logging/log-facade'
 import { ConfigService } from '@nestjs/config'
 
 export class DeconzBinding {

@@ -25,6 +25,8 @@
     "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.5.1",
     "@nestjs/platform-express": "^7.5.1",
+    "colors": "^1.4.0",
+    "date-fns": "^2.20.1",
     "mqtt-match": "^2.0.3",
     "nest-winston": "^1.4.1",
     "reflect-metadata": "^0.1.13",

@@ -1,9 +1,10 @@
-import { ItemValue, Primitive } from './item-value.model'
+import { ItemValue } from './item-value.model'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 import { NumericValue } from './numeric-value.model'
 import { OnOffValue } from './onoff-value.model'
 import { OpenClosedValue } from './openclose-value.model'
 import { IntegerValue } from './integer-value.model'
+import { Primitive } from '../core-types'
 
 export function itemValueFactory(type: ItemValueTypeIndicator, value: Primitive): ItemValue {
   switch (type) {

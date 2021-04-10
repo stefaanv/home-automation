@@ -1,4 +1,5 @@
-import { ItemValue, Primitive } from './item-value.model'
+import { Primitive } from '../core-types'
+import { ItemValue } from './item-value.model'
 
 export class NumericValue extends ItemValue {
   public readonly value: number | undefined

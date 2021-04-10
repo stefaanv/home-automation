@@ -5,22 +5,16 @@ services:
     container_name: cozo-api
     restart: always
     environment:
-      NODE_ENV: test
+      NODE_ENV: production
       PORT: 3000
-      RSA_DATABASE_HOST: rsa-ng-db
-      RSA_DATABASE_PASSWORD: brumed72
-      LOG_DATABASE_HOST: docker02
-      LOG_DATABASE_PASSWORD: vinc@bruyland
-      DECLARE_PATIENT_SERVICE_URL: ''
-      REBOOT_SECRET: 'secret'
-      DATA_DIRECTORY: '../data'
-    volumes:
-      - /usr/bruyland/cozo-api/logs:/usr/bruyland/logs
-      - /usr/bruyland/cozo-api/config:/usr/bruyland/dist/config
-    ports:
-      - '2999:3000'
-    extra_hosts:
-      - 'rsa-ng-db:192.168.1.156'
-      - 'docker02:192.168.1.161'
+      LOG_FOLDER: './mylogs'
+      LOG_FILE_PREFIX: './tsHA__'
+      CONFIG_FOLDER: './config'
+      MAIN_CONFIG_FILE: 'config.js'
+#    volumes:
+#      - /usr/bruyland/cozo-api/logs:/usr/bruyland/logs
+#      - /usr/bruyland/cozo-api/config:/usr/bruyland/dist/config
+#    ports:
+#      - '2999:3000'
 #      entrypoint:
 #         - /bin/bash

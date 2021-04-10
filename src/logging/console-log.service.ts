@@ -5,7 +5,7 @@ import * as colors from 'colors'
 import { CONSOLE_LOG_MAX_CONTEXT_LENGTH, CONSOLE_LOG_PREFIX_LENGTH, CONSOLE_LOG_TIME_FORMAT } from '../constants'
 
 @Injectable()
-export class ConsoleLog extends LogFacade {
+export class ConsoleLogService extends LogFacade {
   private _context: string
   set context(value: string) {
     this._context = value
@@ -17,7 +17,7 @@ export class ConsoleLog extends LogFacade {
   }
 
   child(context: string): LogFacade {
-    const child = new ConsoleLog()
+    const child = new ConsoleLogService()
     child._context = context.substr(0, CONSOLE_LOG_MAX_CONTEXT_LENGTH)
     return child
   }
@@ -54,11 +54,11 @@ export class ConsoleLog extends LogFacade {
 
   log(severity: LogSeverity, message: string, uid?: string) {
     const time = colors.grey(fns.format(new Date(), CONSOLE_LOG_TIME_FORMAT))
-    const _uid = uid ? colors.green(uid.substr(0, 5)) : undefined
+    const _uid = colors.green(uid ? '(' + uid.substr(0, 5) + ')' : '       ')
     const context = colors.yellow(this._context)
-    let sevColor = this.severityToColor(severity)
+    const sevColor = this.severityToColor(severity)
     const _sev = sevColor(this.severityToString(severity))
-    const prefix = `${_sev} ${time}${_uid ? '' : `${_uid ? ' - ' + _uid : ''}`} ${'[' + colors.yellow(context) + ']'}`
+    const prefix = `${_sev} ${time} ${_uid} ${'[' + colors.yellow(context) + ']'}`
     console.log(`${prefix.substr(0, CONSOLE_LOG_PREFIX_LENGTH).padEnd(CONSOLE_LOG_PREFIX_LENGTH)} => ${sevColor(message)}`)
   }
 }

@@ -1,0 +1,26 @@
+﻿version: '3'
+services:
+  cozo-api:
+    image: bruyland/amaron-cozo-api:latest
+    container_name: cozo-api
+    restart: always
+    environment:
+      NODE_ENV: test
+      PORT: 3000
+      RSA_DATABASE_HOST: rsa-ng-db
+      RSA_DATABASE_PASSWORD: brumed72
+      LOG_DATABASE_HOST: docker02
+      LOG_DATABASE_PASSWORD: vinc@bruyland
+      DECLARE_PATIENT_SERVICE_URL: ''
+      REBOOT_SECRET: 'secret'
+      DATA_DIRECTORY: '../data'
+    volumes:
+      - /usr/bruyland/cozo-api/logs:/usr/bruyland/logs
+      - /usr/bruyland/cozo-api/config:/usr/bruyland/dist/config
+    ports:
+      - '2999:3000'
+    extra_hosts:
+      - 'rsa-ng-db:192.168.1.156'
+      - 'docker02:192.168.1.161'
+#      entrypoint:
+#         - /bin/bash

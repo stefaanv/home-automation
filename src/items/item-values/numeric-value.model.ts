@@ -2,13 +2,11 @@ import { Primitive } from '../core-types'
 import { ItemValue } from './item-value.model'
 
 export class NumericValue extends ItemValue {
-  public readonly value: number | undefined
-  private _unit: string
-  private _precision: number
+  private _unit?: string
+  private _precision?: number
 
   constructor(pValue?: Primitive) {
-    super()
-    this.value = NumericValue.toInternalValue(pValue)
+    super('Numeric', NumericValue.toInternalValue(pValue))
   }
 
   public static check(pValue: Primitive): boolean {
@@ -49,7 +47,7 @@ export class NumericValue extends ItemValue {
 
   public toString(unit?: string, precision?: number): string {
     if (!this.value) return 'null'
-    return this.value.toFixed(precision) + (unit ? ' ' + unit : '')
+    return (this.value as number).toFixed(precision) + (unit ? ' ' + unit : '')
   }
 
   public clone(): NumericValue {

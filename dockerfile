@@ -7,16 +7,16 @@ ARG BITBUCKET_TAG
 ARG AP=/usr/src/app
 ARG BUILD_DIR=dist
 
-FROM node:14 as base
+FROM node:15.6 as base
 FROM base AS builder
 
-ARG APPLICATION_NAME
-ARG BITBUCKET_TAG
-ARG BITBUCKET_COMMIT
+#ARG APPLICATION_NAME
+#ARG BITBUCKET_TAG
+#ARG BITBUCKET_COMMIT
 
-RUN echo APPLICATION_NAME `${APPLICATION_NAME}`
-RUN echo BITBUCKET_COMMIT ${BITBUCKET_COMMIT}
-RUN echo BITBUCKET_TAG ${BITBUCKET_TAG}
+#RUN echo APPLICATION_NAME `${APPLICATION_NAME}`
+#RUN echo BITBUCKET_COMMIT ${BITBUCKET_COMMIT}
+#RUN echo BITBUCKET_TAG ${BITBUCKET_TAG}
 
 ARG AP
 ARG BUILD_DIR
@@ -35,6 +35,7 @@ FROM base as release
 # copying the arguments into the current container
 ARG AP
 ARG BUILD_DIR
+ARG APPLICATION_NAME
 ARG BITBUCKET_COMMIT
 ARG BITBUCKET_TAG
 ARG PORT
@@ -44,7 +45,10 @@ ARG NODE_ENV
 WORKDIR ${AP}
 
 # Install npm dependencies
-COPY --from=builder package*.json ./
+#COPY --from=builder package*.json ./
+COPY --from=builder ${AP}/package.json ${AP}/
+COPY --from=builder ${AP}/package-lock.json ${AP}/
+
 RUN npm install --only=production --no-optional
 
 # Copy applicaiton files and run build
@@ -55,6 +59,7 @@ ENV PORT=$PORT
 ENV NODE_ENV=$NODE_ENV
 ENV GIT_COMMIT=$BITBUCKET_COMMIT
 ENV GIT_TAG=$BITBUCKET_TAG
+ENV APPLICATION_NAME='${APPLICATION_NAME}'
 
 # Expose port
 EXPOSE ${PORT}

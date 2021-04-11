@@ -1,0 +1,6 @@
+# action.yml
+name: 'Github build script'
+description: 'build docker container on github'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

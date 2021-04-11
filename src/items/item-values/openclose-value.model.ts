@@ -6,7 +6,7 @@ export class OpenClosedValue extends BinaryValue {
   static labels: BinaryValueLabels
 
   constructor(value?: Primitive) {
-    super(OpenClosedValue.labels, value)
+    super('OpenClosed', value, OpenClosedValue.labels)
   }
   public equals(other: ItemValue | Primitive) {
     if (other instanceof ItemValue) {

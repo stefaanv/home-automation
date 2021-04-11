@@ -1,14 +1,14 @@
 ﻿version: '3'
 services:
   cozo-api:
-    image: bruyland/amaron-cozo-api:latest
-    container_name: cozo-api
+    image: stefaanv/ts-home-automation:latest
+    container_name: tsHomeAutomation
     restart: always
     environment:
       NODE_ENV: production
       PORT: 3000
       LOG_FOLDER: './mylogs'
-      LOG_FILE_PREFIX: './tsHA__'
+      LOG_FILE_PREFIX: 'tsHA__'
       CONFIG_FOLDER: './config'
       MAIN_CONFIG_FILE: 'config.js'
 #    volumes:

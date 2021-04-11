@@ -1,15 +1,14 @@
 import { Primitive } from '../core-types'
+import { ItemValueTypeIndicator } from './item-value-type-indicators'
 import { ItemValue } from './item-value.model'
 
 export type BinaryValueLabels = { zero: string; one: string }
 
 export abstract class BinaryValue extends ItemValue {
   public readonly value: string | undefined
-  public static labels: BinaryValueLabels
 
-  constructor(labels: BinaryValueLabels, pValue?: Primitive) {
-    super()
-    this.value = BinaryValue.toInternalValue(pValue, labels)
+  constructor(type: ItemValueTypeIndicator, pValue: Primitive, labels: BinaryValueLabels) {
+    super(type, BinaryValue.toInternalValue(pValue, labels))
   }
 
   public static check(pValue: Primitive, labels: BinaryValueLabels) {

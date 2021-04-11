@@ -3,16 +3,18 @@ import { LogFacade, LogSeverity } from './log-facade'
 import * as fns from 'date-fns'
 import * as winston from 'winston'
 import * as drf from 'winston-daily-rotate-file'
+// import * as mail from 'winston-mail'
 import { MAIN_LOG_CONTEXT, WINSTON_CONSOLE_LOG_PREFIX_LENGTH } from '../constants'
 
 @Injectable()
 export class WinstonLogService extends LogFacade {
-  static _logger: winston.Logger
+  static _fileConsoleLogger: winston.Logger
+  static _mailLogger: winston.Logger
   private _myLogger: winston.Logger
 
   constructor(@Inject(MAIN_LOG_CONTEXT) context?: string) {
     super()
-    this._myLogger = WinstonLogService._logger.child({ context: context ?? 'main' })
+    this._myLogger = WinstonLogService._fileConsoleLogger.child({ context: context ?? 'main' })
   }
 
   static createWinstonLogger() {
@@ -66,9 +68,29 @@ export class WinstonLogService extends LogFacade {
       ),
     })
 
-    WinstonLogService._logger = winston.createLogger({
+    WinstonLogService._fileConsoleLogger = winston.createLogger({
       transports: [fileTransport, consoleTransport],
     })
+
+    //TODO! mail logging zelf implementeren, fout in winston-mail
+    // const mailTransportOptions = {
+    //   //Parameters are explained at https://github.com/winstonjs/winston-daily-rotate-file
+    //   to: process.env.LOG_MAIL_TO,
+    //   from: process.env.LOG_MAIL_FROM,
+    //   host: process.env.LOG_MAIL_HOST,
+    //   port: parseInt(process.env.LOG_MAIL_PORT ?? '25'),
+    //   secure: (process.env.LOG_MAIL_SECURE ?? 'false') === 'true',
+    //   username: process.env.LOG_MAIL_USER,
+    //   password: process.env.LOG_MAIL_PASSWORD,
+
+    //   format: winston.format.combine(winston.format.timestamp({ format: consoleTimeFormat }), winston.format.simple()),
+    // }
+
+    // const { to, from, host, port } = mailTransportOptions
+
+    // if (to && from && host && port) {
+    //   WinstonLogService._mailLogger = winston.createLogger(mailTransportOptions)
+    // }
   }
 
   child(context: string): LogFacade {

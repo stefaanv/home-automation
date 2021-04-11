@@ -7,12 +7,14 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "es2019",
+    "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
     "strictNullChecks": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "strict": true,
   },
   "paths": {
     "@items/*": [

@@ -11,6 +11,7 @@ export class BindingConnector {
   constructor(id: number, label: string, updateToBinding: ItemChangedToBinding) {
     this._bindingId = id
     this._bindingLabel = label
+    this._topicMatchers = []
     this._updateToBinding = updateToBinding
   }
 

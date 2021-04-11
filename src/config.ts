@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import { CONFIG_FOLDER, MAIN_CONFIG_FILE } from '../constants'
+import { CONFIG_FOLDER, MAIN_CONFIG_FILE } from './constants'
 
 interface ChildConfig {
   file: string

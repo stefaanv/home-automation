@@ -2,8 +2,13 @@ import { Primitive } from '../core-types'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 
 export abstract class ItemValue {
-  type: ItemValueTypeIndicator
-  value: Primitive | undefined
+  readonly type: ItemValueTypeIndicator
+  value: Primitive
+
+  constructor(type: ItemValueTypeIndicator, value: Primitive) {
+    this.type = type
+    this.value = value
+  }
 
   equals(other: ItemValue): boolean {
     if (this.constructor !== other.constructor) return false

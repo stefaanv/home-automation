@@ -12,7 +12,7 @@ export class AppController {
   ) {
     this.log = log.child('AppController')
 
-    this.log.debug('DEBUG log message', '12345')
+    this.log.debug('DEBUG log message', '12345', { test: 'test metadata' })
     this.log.info('INFO log message')
     this.log.warn('WARN log message', 'a9d8f')
     this.log.error('ERROR log message')

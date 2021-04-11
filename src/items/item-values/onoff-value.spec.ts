@@ -4,10 +4,6 @@ import { OnOffValue } from './onoff-value.model'
 import { OpenClosedValue } from './openclose-value.model'
 
 describe('OnOff ItemValue', () => {
-  beforeEach(() => {
-    OnOffValue.initialize()
-  })
-
   describe('initial status', () => {
     it('should be undefined', () => {
       const itemValue = new OnOffValue()

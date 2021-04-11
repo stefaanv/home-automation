@@ -6,7 +6,7 @@ export class OnOffValue extends BinaryValue {
   static labels: BinaryValueLabels
 
   constructor(value?: Primitive) {
-    super(OnOffValue.labels, value)
+    super('OnOff', value, OnOffValue.labels)
   }
 
   public equals(other: ItemValue | Primitive) {

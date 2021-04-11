@@ -1,33 +1,20 @@
 import { differenceInMilliseconds, differenceInSeconds } from 'date-fns'
 
 export type LogSeverity = 'debug' | 'info' | 'warn' | 'error' | 'urgent'
+type LogParams = [message: string, uid?: string, meta?: any]
 
 export abstract class LogFacade {
-  private _chronoStart: Date
+  private _chronoStart = new Date()
 
   abstract child(context: string): LogFacade
 
   abstract log(severity: LogSeverity, message: string, uid?: string, meta?: any): void
 
-  debug(message: string, uid?: string, meta?: any) {
-    this.log('debug', message, uid, meta)
-  }
-
-  info(message: string, uid?: string, meta?: any) {
-    this.log('info', message, uid, meta)
-  }
-
-  warn(message: string, uid?: string, meta?: any) {
-    this.log('warn', message, uid, meta)
-  }
-
-  error(message: string, uid?: string, meta?: any) {
-    this.log('error', message, uid, meta)
-  }
-
-  urgent(message: string, uid?: string, meta?: any) {
-    this.log('urgent', message, uid, meta)
-  }
+  debug = (...args: LogParams) => this.log('debug', ...args)
+  warn = (...args: LogParams) => this.log('warn', ...args)
+  info = (...args: LogParams) => this.log('info', ...args)
+  error = (...args: LogParams) => this.log('error', ...args)
+  urgent = (...args: LogParams) => this.log('urgent', ...args)
 
   chronoStart() {
     this._chronoStart = new Date()

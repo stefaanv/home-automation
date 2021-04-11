@@ -21,4 +21,10 @@
 | FILE_LOG_TIME_FORMAT    | Format of file logger (true = json, otherwise simple)              | (D) `true`            | docker compose file  |
 | CONSOLE_LOG_LEVEL       | Min log level output to the console                                | (D) `info`            | docker compose file  |
 | CONSOLE_LOG_TIME_FORMAT | Format for loggin to the console                                   | (D) `HH:mm:ss:sss`    | docker compose file  |
-|                         |                                                                    |                       |                      |
+| LOG_MAIL_HOST           | hostname of SMTP server for urgent log messages                    |                       | docker compose file  |
+| LOG_MAIL_TO             | The address(es) you want to send to                                |                       | docker compose file  |
+| LOG_MAIL_FROM           | The address you want to send from                                  |                       | docker compose file  |
+| LOG_MAIL_PORT           | SMTP port                                                          |                       | docker compose file  |
+| LOG_MAIL_SECURE         | boolean (true=use secure)                                          |                       | docker compose file  |
+| LOG_MAIL_USER           | User for server auth                                               |                       | docker compose file  |
+| LOG_MAIL_PASSWORD       | Password for server auth                                           |                       | docker compose file  |

@@ -5,11 +5,11 @@ export class NumericValue extends ItemValue {
   private _unit?: string
   private _precision?: number
 
-  constructor(pValue?: Primitive) {
-    super('Numeric', NumericValue.toInternalValue(pValue))
+  constructor(pValue?: Primitive, unit = '', precision = 0) {
+    super('Numeric', pValue)
   }
 
-  public static check(pValue: Primitive): boolean {
+  static check(pValue: Primitive): boolean {
     switch (typeof pValue) {
       case 'string':
         return !isNaN(parseFloat(pValue as string))
@@ -22,7 +22,7 @@ export class NumericValue extends ItemValue {
     }
   }
 
-  static toInternalValue(pValue: Primitive): number | undefined {
+  toInternalValue(pValue: Primitive): number | undefined {
     if (!NumericValue.check(pValue) || pValue == undefined) return undefined
 
     switch (typeof pValue) {
@@ -33,15 +33,6 @@ export class NumericValue extends ItemValue {
       case 'boolean':
       default:
         return undefined
-    }
-  }
-
-  public equals(other: ItemValue | Primitive): boolean {
-    if (other instanceof ItemValue) {
-      return super.equals(other)
-    } else {
-      const pValue = other as Primitive
-      return this.value == NumericValue.toInternalValue(pValue)
     }
   }
 

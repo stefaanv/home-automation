@@ -25,7 +25,4 @@ export default async () => {
     config[child.label] = childConfig.default()
   }
   return mainConfigModule.default()
-
-  // return JSON.parse(readFileSync(join(__dirname, CONFIG_FOLDER, MAIN_CONFIG_FILE), 'utf8')) as Record<string, any>
-  // return { main: 'test' } as Record<string, any>
 }

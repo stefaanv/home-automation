@@ -7,6 +7,13 @@ describe('Item tests', () => {
   const previously = new Date(2021, 3, 5, 17, 34, 55)
   const later = new Date(2021, 3, 5, 17, 35, 15)
 
+  describe('Create OpenClosed Value', () => {
+    it('must return false', () => {
+      const openClosedValue = new OpenClosedValue(1)
+      expect(openClosedValue.equals(openClosedValue)).toBeTruthy()
+    })
+  })
+
   describe('Construct uninitialised item', () => {
     it('OpenClosed Item', () => {
       const item = new Item('OpenClosed', 'myItem')

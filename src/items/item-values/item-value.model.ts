@@ -1,26 +1,38 @@
 import { Primitive } from '../core-types'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 
-export abstract class ItemValue {
-  readonly type: ItemValueTypeIndicator
-  value: Primitive
+// volgens https://github.com/microsoft/TypeScript/issues/13462
+export interface HasCheck {
+  check(pValue: Primitive): boolean
+}
+export interface ItemValue extends HasCheck {}
 
-  constructor(type: ItemValueTypeIndicator, value: Primitive) {
+export abstract class ItemValue implements HasCheck {
+  readonly type: ItemValueTypeIndicator
+  protected readonly _value: Primitive
+  public get value() {
+    return this._value
+  }
+
+  constructor(type: ItemValueTypeIndicator, pValue: Primitive) {
     this.type = type
-    this.value = value
+    this._value = this.toInternalValue(pValue)
   }
 
   equals(other: ItemValue): boolean {
     if (this.constructor !== other.constructor) return false
-    if (this.value === undefined && other.value === undefined) return false
-    if (this.value === undefined || other.value === undefined) return false
-    return this.value === other.value
+    return this.equalsPrimitive(other.value)
+  }
+
+  equalsPrimitive(other: Primitive) {
+    return this.value === this.toInternalValue(other)
   }
 
   get hasValue() {
     return this.value != undefined
   }
 
-  abstract toString(unit?: string, precision?: number): string
+  abstract toString(...args: any[]): string
   abstract clone(): ItemValue
+  protected abstract toInternalValue(pValue: Primitive): Primitive
 }

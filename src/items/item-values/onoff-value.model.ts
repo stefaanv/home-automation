@@ -1,34 +1,27 @@
 import { Primitive } from '../core-types'
-import { BinaryValue, BinaryValueLabels } from './binary-value.model'
-import { ItemValue } from './item-value.model'
+import { BinaryValue } from './binary-value.model'
 
 export class OnOffValue extends BinaryValue {
-  static labels: BinaryValueLabels
-
-  constructor(value?: Primitive) {
-    super('OnOff', value, OnOffValue.labels)
+  static zeroLabel() {
+    return 'off'
+  }
+  static oneLabel() {
+    return 'on'
   }
 
-  public equals(other: ItemValue | Primitive) {
-    if (other instanceof ItemValue) {
-      return super.equals(other)
-    } else {
-      const pValue = other as Primitive
-      return this.value == BinaryValue.toInternalValue(pValue, OnOffValue.labels)
-    }
+  static check(pValue: Primitive) {
+    return BinaryValue.check(pValue, OnOffValue.zeroLabel, OnOffValue.oneLabel)
   }
 
-  public static check(pValue: Primitive) {
-    return BinaryValue.check(pValue, OnOffValue.labels)
+  toInternalValue(pValue: Primitive) {
+    return BinaryValue.toInternalValueBase(pValue, OnOffValue.check, OnOffValue.zeroLabel, OnOffValue.oneLabel)
   }
 
-  public static initialize() {
-    OnOffValue.labels = { zero: 'off', one: 'on' }
+  constructor(pValue?: Primitive) {
+    super('OnOff', pValue)
   }
 
   public clone() {
     return new OnOffValue(this.value)
   }
 }
-
-OnOffValue.initialize()

@@ -1,33 +1,32 @@
 import { Primitive } from '../core-types'
-import { BinaryValue, BinaryValueLabels } from './binary-value.model'
-import { ItemValue } from './item-value.model'
+import { BinaryValue } from './binary-value.model'
 
 export class OpenClosedValue extends BinaryValue {
-  static labels: BinaryValueLabels
-
-  constructor(value?: Primitive) {
-    super('OpenClosed', value, OpenClosedValue.labels)
+  static zeroLabel() {
+    return 'closed'
   }
-  public equals(other: ItemValue | Primitive) {
-    if (other instanceof ItemValue) {
-      return super.equals(other)
-    } else {
-      const pValue = other as Primitive
-      return this.value == BinaryValue.toInternalValue(pValue, OpenClosedValue.labels)
-    }
+  static oneLabel() {
+    return 'open'
   }
 
-  public static check(pValue: Primitive) {
-    return BinaryValue.check(pValue, OpenClosedValue.labels)
+  static check(pValue: Primitive) {
+    return BinaryValue.check(pValue, OpenClosedValue.zeroLabel, OpenClosedValue.oneLabel)
   }
 
-  public static initialize() {
-    OpenClosedValue.labels = { zero: 'closed', one: 'open' }
+  toInternalValue(pValue: Primitive) {
+    return BinaryValue.toInternalValueBase(
+      pValue,
+      OpenClosedValue.check,
+      OpenClosedValue.zeroLabel,
+      OpenClosedValue.oneLabel,
+    )
   }
 
-  public clone(): BinaryValue {
+  constructor(pValue?: Primitive) {
+    super('OpenClosed', pValue)
+  }
+
+  public clone() {
     return new OpenClosedValue(this.value)
   }
 }
-
-OpenClosedValue.initialize()

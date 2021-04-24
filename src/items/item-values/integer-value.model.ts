@@ -2,20 +2,14 @@ import { Primitive } from '../core-types'
 import { NumericValue } from './numeric-value.model'
 
 export class IntegerValue extends NumericValue {
-  constructor(pValue?: Primitive) {
-    if (!IntegerValue.check(pValue)) {
-      super(undefined)
-    } else {
-      super(IntegerValue.toInternalValue(pValue))
-    }
+  static check(pValue: Primitive): boolean {
+    // prettier-ignore
+    return (typeof pValue == 'string' && !isNaN(parseInt(pValue))) 
+      || (typeof pValue == 'number' && Number.isInteger(pValue))
   }
 
-  public static check(pValue: Primitive): boolean {
-    return (typeof pValue == 'string' && !isNaN(parseInt(pValue))) || (typeof pValue == 'number' && Number.isInteger(pValue))
-  }
-
-  static toInternalValue(pValue: Primitive): number | undefined {
-    if (!NumericValue.check(pValue) || pValue == undefined) return undefined
+  toInternalValue(pValue: Primitive): number | undefined {
+    if (!IntegerValue.check(pValue) || pValue == undefined) return undefined
 
     switch (typeof pValue) {
       case 'string':

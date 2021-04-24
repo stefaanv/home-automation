@@ -4,6 +4,7 @@ import { OnOffValue } from './onoff-value.model'
 import { OpenClosedValue } from './openclose-value.model'
 
 describe('OnOff ItemValue', () => {
+  let onOffValue = new OnOffValue()
   describe('initial status', () => {
     it('should be undefined', () => {
       const itemValue = new OnOffValue()
@@ -162,10 +163,10 @@ describe('OnOff ItemValue', () => {
       const itemValue2 = new OnOffValue(1)
       expect(itemValue2.equals(itemValue1)).toBeTruthy()
       expect(itemValue1.equals(itemValue2)).toBeTruthy()
-      expect(itemValue1.equals('on')).toBeTruthy()
-      expect(itemValue1.equals('ON')).toBeTruthy()
-      expect(itemValue1.equals(1)).toBeTruthy()
-      expect(itemValue1.equals(true)).toBeTruthy()
+      expect(itemValue1.equalsPrimitive('on')).toBeTruthy()
+      expect(itemValue1.equalsPrimitive('ON')).toBeTruthy()
+      expect(itemValue1.equalsPrimitive(1)).toBeTruthy()
+      expect(itemValue1.equalsPrimitive(true)).toBeTruthy()
     })
 
     it('false for unequal values', () => {
@@ -173,9 +174,9 @@ describe('OnOff ItemValue', () => {
       const itemValue2 = new OnOffValue(0)
       expect(itemValue2.equals(itemValue1)).toBeFalsy()
       expect(itemValue1.equals(itemValue2)).toBeFalsy()
-      expect(itemValue1.equals('off')).toBeFalsy()
-      expect(itemValue1.equals(0)).toBeFalsy()
-      expect(itemValue1.equals(false)).toBeFalsy()
+      expect(itemValue1.equalsPrimitive('off')).toBeFalsy()
+      expect(itemValue1.equalsPrimitive(0)).toBeFalsy()
+      expect(itemValue1.equalsPrimitive(false)).toBeFalsy()
     })
 
     it('undefined does not equal other value', () => {
@@ -183,8 +184,8 @@ describe('OnOff ItemValue', () => {
       const itemValue2 = new OnOffValue(undefined)
       expect(itemValue2.equals(itemValue1)).toBeFalsy()
       expect(itemValue1.equals(itemValue2)).toBeFalsy()
-      expect(itemValue1.equals(undefined)).toBeFalsy()
-      expect(itemValue1.equals('blabla')).toBeFalsy()
+      expect(itemValue1.equalsPrimitive(undefined)).toBeFalsy()
+      expect(itemValue1.equalsPrimitive('blabla')).toBeFalsy()
     })
 
     it('undefined does not equal other value', () => {
@@ -192,9 +193,9 @@ describe('OnOff ItemValue', () => {
       const itemValue2 = new OnOffValue('OFF')
       expect(itemValue2.equals(itemValue1)).toBeFalsy()
       expect(itemValue1.equals(itemValue2)).toBeFalsy()
-      expect(itemValue1.equals('on')).toBeFalsy()
-      expect(itemValue1.equals(true)).toBeFalsy()
-      expect(itemValue1.equals(undefined)).toBeTruthy()
+      expect(itemValue1.equalsPrimitive('on')).toBeFalsy()
+      expect(itemValue1.equalsPrimitive(true)).toBeFalsy()
+      expect(itemValue1.equalsPrimitive(undefined)).toBeTruthy()
     })
 
     it('Compare with OpenClosed type', () => {

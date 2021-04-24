@@ -1,10 +1,16 @@
 import { IntegerValue } from './integer-value.model'
 import { NumericValue } from './numeric-value.model'
+import { OpenClosedValue } from './openclose-value.model'
 
 describe('IntegerValue', () => {
+  let itemValue: IntegerValue
+  let integerValue: IntegerValue
+  let onOffValue: IntegerValue
+  let openClosedValue: OpenClosedValue
+
   describe('construct without parameter', () => {
     it('should be undefined', () => {
-      const itemValue = new IntegerValue()
+      itemValue = new IntegerValue()
       expect(itemValue.value).toBeUndefined()
       expect(itemValue.hasValue).toBeFalsy()
     })
@@ -12,9 +18,21 @@ describe('IntegerValue', () => {
 
   describe('construct with undefined', () => {
     it('should be undefined', () => {
-      const itemValue = new IntegerValue(undefined)
+      itemValue = new IntegerValue(undefined)
       expect(itemValue.value).toBeUndefined()
       expect(itemValue.hasValue).toBeFalsy()
+    })
+  })
+
+  describe('compare different subtypes', () => {
+    it('must return false', () => {
+      integerValue = new IntegerValue(7)
+      onOffValue = new IntegerValue('On')
+      openClosedValue = new OpenClosedValue(1)
+      expect(integerValue.equals(onOffValue)).toBeFalsy()
+      expect(integerValue.equals(openClosedValue)).toBeFalsy()
+      expect(openClosedValue.equals(onOffValue)).toBeFalsy()
+      expect(onOffValue.equals(openClosedValue)).toBeFalsy()
     })
   })
 
@@ -80,15 +98,15 @@ describe('IntegerValue', () => {
 
   describe('toString with unit', () => {
     it('null if non-integer number', () => {
-      const itemValue = new IntegerValue(10.5)
+      itemValue = new IntegerValue(10.5)
       expect(itemValue.toString('Lux')).toBe('null')
     })
     it('null if integer number', () => {
-      const itemValue = new IntegerValue(12)
+      itemValue = new IntegerValue(12)
       expect(itemValue.toString('Lux')).toBe('12 Lux')
     })
     it('value if non-integer string', () => {
-      const itemValue = new IntegerValue(-10)
+      itemValue = new IntegerValue(-10)
       expect(itemValue.toString('Lux')).toBe('-10 Lux')
     })
   })

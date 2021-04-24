@@ -1,20 +1,25 @@
 import { Primitive } from '../core-types'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 import { ItemValue } from './item-value.model'
+import { HasCheck } from './item-value.model'
 
-export type BinaryValueLabels = { zero: string; one: string }
+interface HasCheckAndBinValues extends HasCheck {
+  zeroLabel(): string
+  oneLabel(): string
+}
 
+export interface BinaryValue extends HasCheckAndBinValues {
+  check(pValue: Primitive): boolean
+}
 export abstract class BinaryValue extends ItemValue {
-  public readonly value: string | undefined
-
-  constructor(type: ItemValueTypeIndicator, pValue: Primitive, labels: BinaryValueLabels) {
-    super(type, BinaryValue.toInternalValue(pValue, labels))
+  constructor(type: ItemValueTypeIndicator, pValue: Primitive) {
+    super(type, pValue)
   }
 
-  public static check(pValue: Primitive, labels: BinaryValueLabels) {
+  static check(pValue: Primitive, zeroLabel: () => string, oneLabel: () => string) {
     switch (typeof pValue) {
       case 'string':
-        return pValue.toLocaleLowerCase() == labels.zero || pValue.toLocaleLowerCase() == labels.one
+        return pValue.toLocaleLowerCase() == zeroLabel() || pValue.toLocaleLowerCase() == oneLabel()
       case 'number':
         return pValue === 0 || pValue === 1
       case 'boolean':
@@ -25,23 +30,28 @@ export abstract class BinaryValue extends ItemValue {
     }
   }
 
-  static toInternalValue(pValue: Primitive, labels: BinaryValueLabels) {
-    if (!BinaryValue.check(pValue, labels) || pValue == undefined) return undefined
+  static toInternalValueBase(
+    pValue: Primitive,
+    check: (pValue: Primitive) => boolean,
+    zeroLabel: () => string,
+    oneLabel: () => string,
+  ): Primitive {
+    if (!check(pValue) || pValue == undefined) return undefined
 
     switch (typeof pValue) {
       case 'string':
         return pValue.toLocaleLowerCase()
       case 'number':
-        return pValue === 0 ? labels.zero : labels.one
+        return pValue === 0 ? zeroLabel() : oneLabel()
       case 'boolean':
-        return pValue ? labels.one : labels.zero
+        return !pValue ? zeroLabel() : oneLabel()
       default:
         return undefined
     }
   }
 
-  public toString() {
+  public toString(...args: any[]): string {
     if (this.value === undefined) return 'null'
-    return this.value
+    return this.value.toString()
   }
 }

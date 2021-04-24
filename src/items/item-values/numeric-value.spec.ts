@@ -1,6 +1,7 @@
 import { NumericValue } from './numeric-value.model'
 
 describe('NumericValue', () => {
+  let itemValue: NumericValue
   describe('construct without parameter', () => {
     it('should be undefined', () => {
       const itemValue = new NumericValue()

@@ -2,12 +2,8 @@ import { Primitive } from '../core-types'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 
 // volgens https://github.com/microsoft/TypeScript/issues/13462
-export interface HasCheck {
-  check(pValue: Primitive): boolean
-}
-export interface ItemValue extends HasCheck {}
 
-export abstract class ItemValue implements HasCheck {
+export abstract class ItemValue {
   readonly type: ItemValueTypeIndicator
   protected readonly _value: Primitive
   public get value() {
@@ -20,7 +16,7 @@ export abstract class ItemValue implements HasCheck {
   }
 
   equals(other: ItemValue): boolean {
-    if (this.constructor !== other.constructor) return false
+    if (this.constructor.name !== other.constructor.name) return false
     return this.equalsPrimitive(other.value)
   }
 

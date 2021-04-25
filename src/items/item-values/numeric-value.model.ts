@@ -6,7 +6,7 @@ export class NumericValue extends ItemValue {
   private _precision?: number
 
   constructor(pValue?: Primitive, unit = '', precision = 0) {
-    super('Numeric', pValue)
+    super('Numeric', NumericValue.check(pValue) ? pValue : undefined)
   }
 
   static check(pValue: Primitive): boolean {

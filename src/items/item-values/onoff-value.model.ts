@@ -1,20 +1,15 @@
 import { Primitive } from '../core-types'
-import { BinaryValue } from './binary-value.model'
+import { BinaryLabels, BinaryValue } from './binary-value.model'
 
 export class OnOffValue extends BinaryValue {
-  static zeroLabel() {
-    return 'off'
-  }
-  static oneLabel() {
-    return 'on'
+  static readonly labels: BinaryLabels = { zero: 'off', one: 'on' }
+
+  toInternalValue(pValue: Primitive) {
+    return BinaryValue.toInternalValue(pValue, OnOffValue.labels)
   }
 
   static check(pValue: Primitive) {
-    return BinaryValue.check(pValue, OnOffValue.zeroLabel, OnOffValue.oneLabel)
-  }
-
-  toInternalValue(pValue: Primitive) {
-    return BinaryValue.toInternalValueBase(pValue, OnOffValue.check, OnOffValue.zeroLabel, OnOffValue.oneLabel)
+    return BinaryValue.check(pValue, OnOffValue.labels)
   }
 
   constructor(pValue?: Primitive) {

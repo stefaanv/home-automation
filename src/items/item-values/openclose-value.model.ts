@@ -1,25 +1,15 @@
 import { Primitive } from '../core-types'
-import { BinaryValue } from './binary-value.model'
+import { BinaryLabels, BinaryValue } from './binary-value.model'
 
 export class OpenClosedValue extends BinaryValue {
-  static zeroLabel() {
-    return 'closed'
-  }
-  static oneLabel() {
-    return 'open'
+  static readonly labels: BinaryLabels = { zero: 'closed', one: 'open' }
+
+  toInternalValue(pValue: Primitive) {
+    return BinaryValue.toInternalValue(pValue, OpenClosedValue.labels)
   }
 
   static check(pValue: Primitive) {
-    return BinaryValue.check(pValue, OpenClosedValue.zeroLabel, OpenClosedValue.oneLabel)
-  }
-
-  toInternalValue(pValue: Primitive) {
-    return BinaryValue.toInternalValueBase(
-      pValue,
-      OpenClosedValue.check,
-      OpenClosedValue.zeroLabel,
-      OpenClosedValue.oneLabel,
-    )
+    return BinaryValue.check(pValue, OpenClosedValue.labels)
   }
 
   constructor(pValue?: Primitive) {

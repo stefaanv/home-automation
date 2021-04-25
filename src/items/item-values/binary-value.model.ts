@@ -1,25 +1,19 @@
 import { Primitive } from '../core-types'
 import { ItemValueTypeIndicator } from './item-value-type-indicators'
 import { ItemValue } from './item-value.model'
-import { HasCheck } from './item-value.model'
 
-interface HasCheckAndBinValues extends HasCheck {
-  zeroLabel(): string
-  oneLabel(): string
-}
+export type BinaryLabels = { zero: string; one: string }
 
-export interface BinaryValue extends HasCheckAndBinValues {
-  check(pValue: Primitive): boolean
-}
 export abstract class BinaryValue extends ItemValue {
   constructor(type: ItemValueTypeIndicator, pValue: Primitive) {
     super(type, pValue)
   }
 
-  static check(pValue: Primitive, zeroLabel: () => string, oneLabel: () => string) {
+  static check(pValue: Primitive, l: BinaryLabels) {
     switch (typeof pValue) {
       case 'string':
-        return pValue.toLocaleLowerCase() == zeroLabel() || pValue.toLocaleLowerCase() == oneLabel()
+        //prettier-ignore
+        return [l.zero, l.one].includes(pValue.toLocaleLowerCase())
       case 'number':
         return pValue === 0 || pValue === 1
       case 'boolean':
@@ -30,21 +24,16 @@ export abstract class BinaryValue extends ItemValue {
     }
   }
 
-  static toInternalValueBase(
-    pValue: Primitive,
-    check: (pValue: Primitive) => boolean,
-    zeroLabel: () => string,
-    oneLabel: () => string,
-  ): Primitive {
-    if (!check(pValue) || pValue == undefined) return undefined
+  static toInternalValue(pValue: Primitive, l: BinaryLabels): Primitive {
+    if (!BinaryValue.check(pValue, l) || pValue == undefined) return undefined
 
     switch (typeof pValue) {
       case 'string':
         return pValue.toLocaleLowerCase()
       case 'number':
-        return pValue === 0 ? zeroLabel() : oneLabel()
+        return pValue === 0 ? l.zero : l.one
       case 'boolean':
-        return !pValue ? zeroLabel() : oneLabel()
+        return !pValue ? l.zero : l.one
       default:
         return undefined
     }
